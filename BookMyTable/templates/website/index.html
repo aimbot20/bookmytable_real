@@ -1,13 +1,14 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>First Django webpage</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    <h1>You are now viewing BookMyTable's HomePage. Happy coding! </h1>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block title %}
+Homepage
+{% endblock %}
+
+{% block content %}
+<h1>
+    BookMyTable HomePage - Customer side
+</h1>
+<p>hellooooo</p>
+{% endblock %} 
+
+
