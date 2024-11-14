@@ -21,6 +21,11 @@ def restaurant_details(request, R_ID):
     restaurant = get_object_or_404(Restaurant, pk=R_ID)
     menu = Menu.objects.filter(restaurant=restaurant).first()  # Assuming one menu per restaurant
     dishes = Dish.objects.filter(menu=menu) if menu else []  # Get dishes for the menu if it exists
+
+    print(f"Restaurant: {restaurant}")
+    print(f"Menu: {menu}")
+    print(f"Dishes: {list(dishes)}")
+
     return render(request, 'restaurant/restaurant_details.html', {
         'restaurant': restaurant,
         'dishes': dishes
