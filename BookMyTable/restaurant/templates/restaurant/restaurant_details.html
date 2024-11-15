@@ -36,4 +36,7 @@ Restaurant Details - {{ restaurant.R_Name }}
 {% else %}
     <p>No dishes available for this restaurant.</p>
 {% endif %}
+
+<!-- Book Table Button -->
+<a href="{% url 'reserve_table' restaurant.R_ID %}" class="btn btn-primary">Book Table</a>
 {% endblock %}
