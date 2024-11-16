@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'restaurant',
     'tailwind',
     'theme',
+    'users',
     
     
 ]
