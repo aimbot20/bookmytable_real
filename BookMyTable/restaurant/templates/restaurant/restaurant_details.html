@@ -1,17 +1,42 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Restaurant Details Page
+Restaurant Details - {{ restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h2>
-    Welcome to {{restaurant.R_Name}}
-</h2>
+<h2>Welcome to {{ restaurant.R_Name }}</h2>
 
+<!-- Restaurant Details -->
+<div>
+    <p><strong>Contact:</strong> {{ restaurant.R_ContactNumber }}</p>
+    <p><strong>Email:</strong> {{ restaurant.R_EmailAddress }}</p>
+    <p><strong>Address:</strong> {{ restaurant.R_Address }}</p>
+    <p><strong>Description:</strong> {{ restaurant.R_Description }}</p>
+    <p><strong>Cuisine Types:</strong> {{ restaurant.R_CuisineTypes }}</p>
+    <p><strong>Reservation Cost:</strong> ${{ restaurant.R_ReservationCost }}</p>
+    <p><strong>Opening Hours:</strong> {{ restaurant.R_OpenHours }}</p>
+    <p><strong>Rating:</strong> {{ restaurant.Rating }}</p>
+</div>
 
+<!-- Restaurant Dishes -->
+<h3>Dishes</h3>
+{% if dishes %}
+    <ul>
+        {% for dish in dishes %}
+            <li>
+                <strong>Name:</strong> {{ dish.D_Name }} <br>
+                <strong>Price:</strong> ${{ dish.D_Price }} <br>
+                <strong>Description:</strong> {{ dish.D_Description }} <br>
+                <strong>Category:</strong> {{ dish.D_Category }} <br>
+                <strong>Preparation Time:</strong> {{ dish.D_PrepTime }} minutes
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No dishes available for this restaurant.</p>
+{% endif %}
 
-   
-    
+<!-- Book Table Button -->
+<a href="{% url 'reserve_table' restaurant.R_ID %}" class="btn btn-primary">Book Table</a>
 {% endblock %}
-

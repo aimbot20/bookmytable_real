@@ -5,6 +5,9 @@ from .models import Menu
 from .models import Dish
 from .models import Layout
 from .models import Component
+from .models import Coordinates
+from .models import Table
+
 
 
 
@@ -14,5 +17,7 @@ admin.site.register(Restaurant)
 admin.site.register(Dish)
 admin.site.register(Layout)
 admin.site.register(Component)
+admin.site.register(Table)
+admin.site.register(Coordinates)
 
 
