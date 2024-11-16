@@ -12,7 +12,12 @@ from .models import Table
 
 
 # Register your models here.
+# class MenuInLine(admin.TabularInline):
+#     model = Restaurant
+#     extra = 2
 admin.site.register(Menu)
+
+
 admin.site.register(Restaurant)
 admin.site.register(Dish)
 admin.site.register(Layout)
