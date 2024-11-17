@@ -15,17 +15,26 @@
         {% endblock %}
    
     </title>
+
     <link rel="stylesheet" href="{% static 'style.css' %}">
+
 </head>
+
 <body>
+    <!-- Header -->
     <header>
-        <div class="navbar">
-            <button class="menu-btn" onclick="toggleSidebar()">☰ Menu</button>
-            <h1>Book My Table</h1>
-            <input type="text" placeholder="Search..." class="search-bar">
+        <div class="header-title">
+            <h1 class="logo">Book My Table</h1>
+            <p class="catchphrase">Your perfect dining experience</p>
+        </div>
+    
+        <div class="header-right">
+            <input type="text" placeholder=" Search....    " class="search-bar">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
         </div>
     </header>
-
+    
+    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <button class="close-btn" onclick="toggleSidebar()">×</button>
         <a href="#">Profile</a>
@@ -34,17 +43,31 @@
         <a href="#">Saved Restaurants</a>
     </div>
 
+    <!-- Main Content -->
     <main>
-        <!-- Content goes here -->
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer">
+            <h3>About Us</h3>
+            <p>
+                At Book My Table, we make dining seamless for food enthusiasts and restaurant owners alike. 
+                Explore, reserve, and enjoy unforgettable dining experiences. For any inquiries, feel free to 
+                reach out to us.
+            </p>
+            <p><strong>Email:</strong> support@bookmytable.com</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Sidebar -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('active');
         }
     </script>
-    {% comment %} {% block content %}{% endblock %} {% endcomment %}
 </body>
 </html>

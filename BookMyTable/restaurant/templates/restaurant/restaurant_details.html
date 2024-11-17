@@ -5,38 +5,67 @@ Restaurant Details - {{ restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h2>Welcome to {{ restaurant.R_Name }}</h2>
+<!-- Restaurant Name Centered on Top -->
+<h1 style="text-align: center; font-size: 3rem; margin-top: 20px;">{{ restaurant.R_Name }}</h1>
 
-<!-- Restaurant Details -->
-<div>
-    <p><strong>Contact:</strong> {{ restaurant.R_ContactNumber }}</p>
-    <p><strong>Email:</strong> {{ restaurant.R_EmailAddress }}</p>
-    <p><strong>Address:</strong> {{ restaurant.R_Address }}</p>
-    <p><strong>Description:</strong> {{ restaurant.R_Description }}</p>
-    <p><strong>Cuisine Types:</strong> {{ restaurant.R_CuisineTypes }}</p>
-    <p><strong>Reservation Cost:</strong> ${{ restaurant.R_ReservationCost }}</p>
+<!-- About Us Section -->
+<section style="margin: 40px 0; text-align: left;">
+    <h2>About Us</h2>
+    <p>{{ restaurant.R_Description }}</p>
+</section>
+
+<!-- Restaurant Timing and Location -->
+<section style="margin: 20px 0; text-align: center;">
+    <h3>Timings and Location</h3>
     <p><strong>Opening Hours:</strong> {{ restaurant.R_OpenHours }}</p>
-    <p><strong>Rating:</strong> {{ restaurant.Rating }}</p>
-</div>
+    <p><strong>Address:</strong> {{ restaurant.R_Address }}</p>
+</section>
 
-<!-- Restaurant Dishes -->
-<h3>Dishes</h3>
-{% if dishes %}
-    <ul>
-        {% for dish in dishes %}
-            <li>
-                <strong>Name:</strong> {{ dish.D_Name }} <br>
-                <strong>Price:</strong> ${{ dish.D_Price }} <br>
-                <strong>Description:</strong> {{ dish.D_Description }} <br>
-                <strong>Category:</strong> {{ dish.D_Category }} <br>
-                <strong>Preparation Time:</strong> {{ dish.D_PrepTime }} minutes
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No dishes available for this restaurant.</p>
-{% endif %}
+<!-- Menu Button with Expandable Content -->
+<section style="margin: 30px 0; text-align: center;">
+    <button id="toggleMenuButton" style="padding: 10px 20px; font-size: 1.2rem; cursor: pointer;">
+        Show Menu
+    </button>
+    <div id="menuSection" style="display: none; margin-top: 20px;">
+        <h3>Our Menu</h3>
+        {% if dishes %}
+            <ul>
+                {% for dish in dishes %}
+                    <li style="margin: 10px 0;">
+                        <strong>Name:</strong> {{ dish.D_Name }} <br>
+                        <strong>Price:</strong> ${{ dish.D_Price }} <br>
+                        <strong>Description:</strong> {{ dish.D_Description }} <br>
+                        <strong>Category:</strong> {{ dish.D_Category }} <br>
+                        <strong>Preparation Time:</strong> {{ dish.D_PrepTime }} minutes
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No dishes available for this restaurant.</p>
+        {% endif %}
+    </div>
+</section>
 
-<!-- Book Table Button -->
-<a href="{% url 'reserve_table' restaurant.R_ID %}" class="btn btn-primary">Book Table</a>
+<!-- Book a Table Button -->
+<section style="margin: 50px 0; text-align: center;">
+    <a href="{% url 'reserve_table' restaurant.R_ID %}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.5rem;">
+        Book a Table
+    </a>
+</section>
+
+<!-- JavaScript for Toggle Functionality -->
+<script>
+    const toggleMenuButton = document.getElementById('toggleMenuButton');
+    const menuSection = document.getElementById('menuSection');
+
+    toggleMenuButton.addEventListener('click', () => {
+        if (menuSection.style.display === 'none' || menuSection.style.display === '') {
+            menuSection.style.display = 'block';
+            toggleMenuButton.innerText = 'Hide Menu';
+        } else {
+            menuSection.style.display = 'none';
+            toggleMenuButton.innerText = 'Show Menu';
+        }
+    });
+</script>
 {% endblock %}
