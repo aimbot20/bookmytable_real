@@ -10,16 +10,19 @@ Homepage
 </h1>
 <p>Welcome to BookMyTable, where you can easily reserve your favorite table at any restaurant!</p>
 
-<a href="{% url 'all_restaurant' %}?user_id={{ user.id }}" 
-   class="btn btn-primary" 
-   style="padding: 10px 20px; text-decoration: none; color: white; background-color: blue; border-radius: 5px;">
-    View All Restaurants
-</a>
-
 {% if user %}
     <p>Logged in as User ID: {{ user.id }}</p>
 {% else %}
     <p><em>You are not logged in. Please log in to access more features.</em></p>
 {% endif %}
+
+<!-- Button with added margin to move it further down -->
+<div class="button-container" style="margin-top: 30px;">
+    <a href="{% url 'all_restaurant' %}?user_id={{ user.id }}" 
+       class="btn btn-primary" 
+       style="padding: 10px 20px; text-decoration: none; color: white; background-color: blue; border-radius: 5px;">
+        View All Restaurants
+    </a>
+</div>
 
 {% endblock %}
