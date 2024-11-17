@@ -1,6 +1,6 @@
 .venv/
 venv
-<<<<<<< HEAD
-=======
+# Ignore Python bytecode files
+__pycache__/
 *.pyc
->>>>>>> 21a2c0df487451cc6ebd4130c4256c6430c3c7d3
+
