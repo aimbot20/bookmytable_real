@@ -5,12 +5,17 @@ from .models import Users, Owner, Customer
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('username', 'contact_number', 'wallet_balance')
+    fieldsets = (
+        (None, {
+            'fields': ('username', 'password', 'email', 'first_name', 'last_name', 'contact_number', 'wallet_balance', 'is_customer')
+        }),
+    )
 
 class OwnerAdmin(admin.ModelAdmin):
     list_display = ('username', 'business_name', 'contact_number')
     fieldsets = (
         (None, {
-            'fields': ('username', 'password', 'email', 'first_name', 'last_name', 'contact_number', 'business_name')
+            'fields': ('username', 'password', 'email', 'first_name', 'last_name', 'contact_number', 'business_name', 'is_owner')
         }),
     )
 
