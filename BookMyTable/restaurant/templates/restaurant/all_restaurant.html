@@ -5,23 +5,16 @@ Restaurant List Page
 {% endblock %}
 
 {% block content %}
-<h2>
-    BookMyTable Restaurant List Page
-</h2>
+<h2>BookMyTable Restaurant List Page</h2>
 
-   {% for r in restaurant_list  %}
-        <div class = "font-bold ">
-            <a href ="{% url 'restaurant_details' r.R_ID %}">
-                <button type = "button"
-                class = "menu-btn">
-                    <!--<img src = "{{dish.image.url}}" alt = ""> # to insert an image -->
-                    <h3 class = "text-2xl font-bold"> {{r.R_Name}} </h3>
-                </button>
-            </a>
-            
-        </div>
-
-    {% endfor %} 
-    
+{% for r in restaurant_list %}
+    <div class="font-bold">
+        <!-- Pass user_id as query parameter in the URL -->
+        <a href="{% url 'restaurant_details' r.R_ID %}?user_id={{ user_id }}">
+            <button type="button" class="menu-btn">
+                <h3 class="text-2xl font-bold">{{ r.R_Name }}</h3>
+            </button>
+        </a>
+    </div>
+{% endfor %}
 {% endblock %}
-

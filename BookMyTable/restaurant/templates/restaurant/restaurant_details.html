@@ -48,23 +48,31 @@ Restaurant Details - {{ restaurant.R_Name }}
 
 <!-- Book a Table Button -->
 <section style="margin: 50px 0; text-align: center;">
-    <a href="{% url 'reserve_table' restaurant.R_ID %}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.5rem;">
+    <a href="{% url 'reserve_table' restaurant.R_ID %}?user_id={{ user_id }}" class="btn btn-primary" 
+       style="padding: 15px 30px; font-size: 1.5rem;">
         Book a Table
     </a>
 </section>
 
 <!-- JavaScript for Toggle Functionality -->
 <script>
-    const toggleMenuButton = document.getElementById('toggleMenuButton');
-    const menuSection = document.getElementById('menuSection');
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleMenuButton = document.getElementById('toggleMenuButton');
+        const menuSection = document.getElementById('menuSection');
 
-    toggleMenuButton.addEventListener('click', () => {
-        if (menuSection.style.display === 'none' || menuSection.style.display === '') {
-            menuSection.style.display = 'block';
-            toggleMenuButton.innerText = 'Hide Menu';
+        // Ensure toggle button and menu section exist
+        if (toggleMenuButton && menuSection) {
+            toggleMenuButton.addEventListener('click', () => {
+                if (menuSection.style.display === 'none' || menuSection.style.display === '') {
+                    menuSection.style.display = 'block';
+                    toggleMenuButton.innerText = 'Hide Menu';
+                } else {
+                    menuSection.style.display = 'none';
+                    toggleMenuButton.innerText = 'Show Menu';
+                }
+            });
         } else {
-            menuSection.style.display = 'none';
-            toggleMenuButton.innerText = 'Show Menu';
+            console.error('Toggle button or menu section is missing!');
         }
     });
 </script>
