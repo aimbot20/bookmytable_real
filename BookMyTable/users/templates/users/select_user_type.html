@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Welcome to BookMyTable</h1>
+<p>Are you a:</p>
+<a href="{% url 'select_action' 'customer' %}"><button>Customer</button></a>
+<a href="{% url 'select_action' 'owner' %}"><button>Owner</button></a>
+{% endblock %}

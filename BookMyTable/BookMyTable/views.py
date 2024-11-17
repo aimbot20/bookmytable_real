@@ -1,12 +1,14 @@
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.shortcuts import render
 
-def home(request): 
-    #return HttpResponse("Hello, you are now viewing BookMyTable's Homepage.")
-    return render(request, 'website/index.html')
+def home(request):
+    user_id = request.GET.get('user_id')  # Capture user_id from query parameters
+    return render(request, 'website/index.html', {'user_id': user_id})
 
-def contact(request): 
-    return HttpResponse("Hello, you are now viewing BookMyTable's Contact page.")
+def contact(request):
+    user_id = request.GET.get('user_id')  # Capture user_id from query parameters
+    return render(request, 'website/contact.html', {'user_id': user_id})
 
-def about(request): 
-    return HttpResponse("Hello, you are now viewing BookMyTable's About page.")
+def about(request):
+    user_id = request.GET.get('user_id')  # Capture user_id from query parameters
+    return render(request, 'website/about.html', {'user_id': user_id})
