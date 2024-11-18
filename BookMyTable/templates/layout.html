@@ -24,24 +24,36 @@
     <!-- Header -->
     <header>
         <div class="header-title">
-            <h1 class="logo">Book My Table</h1>
+            <a href="/" class="logo-link">
+                 <h1 class="logo">Book My Table</h1>
+            </a>
             <p class="catchphrase">Your perfect dining experience</p>
         </div>
     
         <div class="header-right">
             <input type="text" placeholder=" Search....    " class="search-bar">
-            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <!-- <button class="menu-btn" onclick="toggleSidebar()">☰</button> -->
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
         </div>
     </header>
     
-    <!-- Sidebar -->
+    <!-- Sidebar
     <div class="sidebar" id="sidebar">
-        <button class="close-btn" onclick="toggleSidebar()">×</button>
+        <button class="close-btn" onclick="toggleSidebar()">X</button>
+        <a href="#">Profile</a>
+        <a href="#">My Reviews</a>
+        <a href="#">My Reservations</a>
+        <a href="#">Saved Restaurants</a>
+    </div> -->
+
+    <div class="dropdown-menu" id="dropdownMenu">
+        <button class="close-btn" onclick="toggleMenu()">X</button>
         <a href="#">Profile</a>
         <a href="#">My Reviews</a>
         <a href="#">My Reservations</a>
         <a href="#">Saved Restaurants</a>
     </div>
+    
 
     <!-- Main Content -->
     <main>
@@ -51,23 +63,23 @@
 
     <!-- Footer -->
     <footer>
-        <div class="footer">
-            <h3>About Us</h3>
-            <p>
-                At Book My Table, we make dining seamless for food enthusiasts and restaurant owners alike. 
-                Explore, reserve, and enjoy unforgettable dining experiences. For any inquiries, feel free to 
-                reach out to us.
-            </p>
+        <div class="footer-content">
+            <h3>Contact Us</h3>
             <p><strong>Email:</strong> support@bookmytable.com</p>
         </div>
     </footer>
 
     <!-- JavaScript for Sidebar -->
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
+        // function toggleSidebar() {
+        //     const sidebar = document.getElementById('sidebar');
+        //     sidebar.classList.toggle('active');
+        // }
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('active');
         }
+
     </script>
 </body>
 </html>
