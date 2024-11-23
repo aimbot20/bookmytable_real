@@ -14,30 +14,29 @@ Payment by Card - {{ reservation.restaurant.R_Name }}
 <h3>Choose Your Payment Option</h3>
 <form method="post">
     {% csrf_token %}
-    <label for="card_option">Select a Card:</label>
-    <select id="card_option" name="card_option">
-        {% for card in user.cards.all %}
-            <option value="{{ card.id }}">{{ card.card_name }}</option>
+    <label for="card_option">Use an Existing Card:</label>
+    <select id="card_option" name="card_id">
+        {% for card in user_cards %}
+            <option value="{{ card.id }}">{{ card.cardholder_name }} - {{ card.card_number|slice:"-4:" }}</option>
         {% empty %}
             <option>No cards available, please add one</option>
         {% endfor %}
     </select><br><br>
-
-    <button type="submit">Pay Now</button>
+    <button type="submit" name="card_option" value="existing_card">Pay Now</button>
 </form>
 
-<h3>Add New Card</h3>
+<h3>Add a New Card</h3>
 <form method="post">
     {% csrf_token %}
     <label for="new_card_number">Card Number:</label>
-    <input type="text" id="new_card_number" name="new_card_number" required><br><br>
+    <input type="text" id="new_card_number" name="new_card_number" required maxlength="16"><br><br>
 
     <label for="new_card_expiry">Expiration Date:</label>
     <input type="date" id="new_card_expiry" name="new_card_expiry" required><br><br>
 
-    <label for="new_card_cvc">CVC:</label>
-    <input type="text" id="new_card_cvc" name="new_card_cvc" required><br><br>
+    <label for="new_card_holder">Cardholder Name:</label>
+    <input type="text" id="new_card_holder" name="new_card_holder" required><br><br>
 
-    <button type="submit">Add Card</button>
+    <button type="submit" name="card_option" value="new_card">Add Card & Pay</button>
 </form>
 {% endblock %}

@@ -1,86 +1,69 @@
 from django.db import models
-from django.conf import settings  # To refer to the custom user model
+from django.conf import settings
 from datetime import datetime
+from users.models import Users, Customer
 
-# Payment Status Enum 
+
+# PAYMENT STATUS - Enumerated class 
 class PaymentStatus(models.TextChoices):
     PENDING = 'Pending', 'Pending'
     COMPLETED = 'Completed', 'Completed'
-   
 
-# Date class (stores payment date)
-class PaymentDate(models.Model):
-    payment = models.OneToOneField('Payment', on_delete=models.CASCADE)
-    date = models.DateTimeField(default=datetime.now)  # Store the date of payment
 
-    def __str__(self):
-        return f"Payment Date: {self.date}"
-
-# Card model to store card details
+# CARD CLASS - to hold card info
 class Card(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,                    # Link to the custom User model (Customer)
+        on_delete=models.CASCADE,
+        limit_choices_to={'is_customer': True},      # Ensure only customers can save cards
+        related_name="saved_cards"  # Allows reverse access (customer.saved_cards)
+    )
     card_number = models.CharField(max_length=16)  
     expiry_date = models.DateField()
     cardholder_name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"Card ending with {self.card_number[-4:]}"  # Display last 4 digits
+        return f"Card ending with {self.card_number[-4:]}"
 
-# Wallet model to store user wallet balance
-class Wallet(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    balance = models.FloatField(default=0.0)  # Money in wallet
 
-    def __str__(self):
-        return f"Wallet balance for {self.user.username}: {self.balance}"
-
-# Base Payment model
+# PAYMENT - parent class
 class Payment(models.Model):
     payment_id = models.AutoField(primary_key=True)
     amount = models.FloatField()
     status = models.CharField(max_length=10, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
     reservation = models.ForeignKey('reservation.Reservation', on_delete=models.CASCADE)  # Link to reservation
+    payment_date = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return f"Payment {self.payment_id} for reservation {self.reservation.id}"
+        return f"Payment {self.payment_id} for Reservation {self.reservation.id}"
 
     def confirm_payment(self):
-        # Logic to confirm the payment based on the payment type (card or wallet)
-        pass
+        self.status = PaymentStatus.COMPLETED
+        self.save()
 
-    def get_payment_done(self, cust_id: int, amount: float):
-        # Logic to complete the payment process
-        pass
 
-# Payment made via Card (child class of Payment)
+# PAYMENT BY CARD - child of Payment
 class PaymentByCard(Payment):
-    card = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, blank=True)  # Card used for the payment
+    saved_card = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, blank=True)  # Use a saved card
+    card_number = models.CharField(max_length=16, blank=True, null=True)  # For one-time card use
+    expiry_date = models.DateField(blank=True, null=True)
+    cardholder_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return f"Payment {self.payment_id} by Card"
+        if self.saved_card:
+            return f"Payment done by Saved Card ending at {self.saved_card.card_number[-4:]}"
+        return f"Payment done by One-Time Card ending {self.card_number[-4:]}"
 
-# Payment made via Wallet (child class of Payment)
+
+# PAYMENT BY WALLET - child of Payment
 class PaymentByWallet(Payment):
-    wallet = models.ForeignKey(Wallet, on_delete=models.SET_NULL, null=True, blank=True)  # Wallet used for the payment
-    amount_in_wallet = models.FloatField()
+    def confirm_payment(self):
+        customer = self.reservation.customer
+        if customer.deduct_from_wallet(self.amount):  # Deduct from the customer's wallet
+            self.status = PaymentStatus.COMPLETED
+        else:
+            self.status = PaymentStatus.PENDING  # Or Failed if you want a new status
+        self.save()
 
     def __str__(self):
         return f"Payment {self.payment_id} by Wallet"
-
-    def confirm_payment(self):
-        if self.wallet.balance >= self.amount:  # Check if enough balance is available
-            self.wallet.balance -= self.amount  # Deduct from wallet balance
-            self.wallet.save()
-            self.status = PaymentStatus.COMPLETED
-            self.save()
-        else:
-            self.status = PaymentStatus.FAILED
-            self.save()
-
-# Optionally, you can add the PaymentDate model to connect the payment to a date
-class PaymentWithDate(models.Model):
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
-    payment_date = models.OneToOneField(PaymentDate, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Payment {self.payment_id} on {self.payment_date.date}"

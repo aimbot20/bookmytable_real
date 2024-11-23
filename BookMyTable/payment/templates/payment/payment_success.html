@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Payment Successful - {{ payment.reservation.restaurant.R_Name }}
+{% endblock %}
+
+{% block content %}
+
+        <h2>Payment Successful!</h2>
+        <p><strong>Thank you for your making a reservation!</strong></p>
+        
+        <p><strong>Reservation ID:</strong> {{ payment.reservation.id }}</p>
+        <p><strong>Table ID:</strong> {{ payment.reservation.table.T_ID }}</p>
+        <p><strong>Restaurant:</strong> {{ payment.reservation.restaurant.R_Name }}</p>
+        <p><strong>Amount Paid:</strong> ${{ payment.amount }}</p>
+        <p><strong>Payment Status:</strong> {{ payment.status }}</p>
+        
+        <h3>Details:</h3>
+        <p>Your payment was successfully processed using the card ending in **{{ payment.card.card_number|slice:":-4" }}**.</p>
+
+        <p>We look forward to serving you at {{ payment.reservation.restaurant.R_Name }}. If you have any questions, feel free to contact us.</p>
+
+        <a href="{% url 'all_restaurant' %}" >Back to Homepage</a> 
+
+{% endblock %}

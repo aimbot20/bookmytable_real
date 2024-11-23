@@ -1,18 +1,16 @@
-
-
-# Create your views here.
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Payment, PaymentByCard, PaymentByWallet, Card, Wallet
+from .models import Payment, PaymentByCard, PaymentByWallet, Card
 from reservation.models import Reservation
 from django.contrib.auth.decorators import login_required
 
+# im using a standard cost for all reservations rn 
+STANDARD_RESERVATION_COST = 50  
 
 # View to display payment options (Card or Wallet)
 @login_required
 def payment_page(request,  R_ID, T_ID, reservation_id):
-    # Get the reservation object based on reservation_id
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
 
     # Ensure the reservation belongs to the logged-in user
     if reservation.customer != request.user:
@@ -20,76 +18,71 @@ def payment_page(request,  R_ID, T_ID, reservation_id):
 
     if request.method == "POST":
         payment_method = request.POST.get("payment_method")
-
         if payment_method == "card":
-            # Handle card payment option
-            return redirect("payment_by_card", reservation_id=reservation.id)
-
+            return redirect('payment_by_card', R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
         elif payment_method == "wallet":
-            # Handle wallet payment option
-            return redirect("payment_by_wallet", reservation_id=reservation.id)
-        
+            return redirect("payment_by_wallet",R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
+
     return render(request, "payment/payment_page.html", {"reservation": reservation})
 
 # View to process payment via card
 @login_required
 def payment_by_card(request, R_ID, T_ID, reservation_id):
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
 
+    reservation_cost = STANDARD_RESERVATION_COST
+
+
+    # Ensure the reservation belongs to the logged-in user
     if reservation.customer != request.user:
         return HttpResponse("You are not authorized to make payment for this reservation.")
-    
 
-    print(f"User: {request.user}")
-
-
-    # Initialize user_cards for both GET and POST requests
-    user_cards = Card.objects.filter(user=request.user)
+    user_cards = Card.objects.filter(customer=request.user)
 
     if request.method == "POST":
         card_option = request.POST.get("card_option")
-        
+
         if card_option == "existing_card":
             card_id = request.POST.get("card_id")
-            card = Card.objects.get(id=card_id)
-            amount = reservation.restaurant.reservation_cost  # Example, use actual logic for the amount
+            card = get_object_or_404(Card, id=card_id, customer=request.user)
+            amount = reservation_cost
+
             payment = PaymentByCard.objects.create(
                 amount=amount,
                 reservation=reservation,
-                card=card,
+                saved_card=card,
                 status="Completed"
             )
-            # Confirm payment here
             payment.confirm_payment()
-            return redirect("payment_success", payment_id=payment.id)
+            return redirect("payment_success",R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id )
 
         elif card_option == "new_card":
-            # Add new card
-            card_number = request.POST.get("card_number")
-            expiry_date = request.POST.get("expiry_date")
-            cardholder_name = request.POST.get("cardholder_name")
-            if not card_number or not expiry_date or not cardholder_name:
+            card_number = request.POST.get("new_card_number")
+            expiry_date = request.POST.get("new_card_expiry")
+            cardholder_name = request.POST.get("new_card_holder")
+
+            if not all([card_number, expiry_date, cardholder_name]):
                 return HttpResponse("All fields are required for adding a new card.")
 
             new_card = Card.objects.create(
-                user=request.user,
+                customer=request.user,
                 card_number=card_number,
                 expiry_date=expiry_date,
                 cardholder_name=cardholder_name
             )
-            # Create a new payment using this card
-            amount = reservation.restaurant.reservation_cost
+
+            amount = reservation_cost
             payment = PaymentByCard.objects.create(
                 amount=amount,
                 reservation=reservation,
-                card=new_card,
+                card_number=card_number,
+                expiry_date=expiry_date,
+                cardholder_name=cardholder_name,
                 status="Completed"
             )
-            # Confirm payment
             payment.confirm_payment()
-            return redirect("payment_success", payment_id=payment.id)
+            return redirect("payment_success", R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
 
-    # Render the page with the user cards and reservation info
     return render(request, "payment/payment_by_card.html", {
         "reservation": reservation,
         "user_cards": user_cards
@@ -98,35 +91,34 @@ def payment_by_card(request, R_ID, T_ID, reservation_id):
 # View to process payment via wallet
 @login_required
 def payment_by_wallet(request,  R_ID, T_ID, reservation_id):
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+    reservation_cost = STANDARD_RESERVATION_COST
 
+    # Ensure the reservation belongs to the logged-in user
     if reservation.customer != request.user:
         return HttpResponse("You are not authorized to make payment for this reservation.")
-    
+
     if request.method == "POST":
-        # Get the user's wallet
-        wallet = Wallet.objects.get(user=request.user)
-        amount = reservation.restaurant.reservation_cost
-        
-        # Check if the user has enough balance
-        if wallet.balance >= amount:
+        amount = reservation_cost
+
+        # Deduct amount from wallet
+        if request.user.deduct_from_wallet(amount):
             payment = PaymentByWallet.objects.create(
                 amount=amount,
                 reservation=reservation,
-                wallet=wallet,
-                amount_in_wallet=wallet.balance,
                 status="Completed"
             )
-            # Confirm wallet payment
             payment.confirm_payment()
-            return redirect("payment_success", payment_id=payment.id)
+            return redirect("payment_success", R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
         else:
             return HttpResponse("Insufficient funds in your wallet.")
-    
+
     return render(request, "payment/payment_by_wallet.html", {"reservation": reservation})
 
-# View for successful payment
 @login_required
-def payment_success(request, payment_id):
-    payment = Payment.objects.get(id=payment_id)
-    return render(request, "payment/payment_success.html", {"payment": payment})
+def payment_success(request, R_ID, T_ID, reservation_id):
+    return render(request, "payment/payment_success.html", {
+        "reservation_id": reservation_id,
+        "R_ID": R_ID,
+        "T_ID": T_ID
+    })
