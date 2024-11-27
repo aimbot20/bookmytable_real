@@ -4,6 +4,7 @@ from django.urls import reverse
 from .models import Customer, Owner
 from .models import Users  # Make sure this is correctly imported
 # from django.contrib.auth import login
+from restaurant.models import Restaurant
 from django.contrib.auth.hashers import check_password
 
 def home(request):
@@ -62,7 +63,7 @@ def signup(request, user_type):
                 contact_number=contact_number,
                 is_owner=True
             )
-            return redirect('select_user_type')  # Redirect to user type selection after signup
+            return redirect('owner_dashboard')  # Redirect to user type selection after signup
 
     return render(request, f'users/signup_{user_type}.html')
 
@@ -90,7 +91,7 @@ def login_view(request, user_type):
                 if user_type == 'customer' and user.is_customer:
                     return redirect(reverse('home') + f'?user_id={user.id}')
                 elif user_type == 'owner' and user.is_owner:
-                    return redirect('select_user_type')  # Change as necessary
+                    return redirect('owner_dashboard')  # Change as necessary
                 else:
                     return render(
                         request,
@@ -114,3 +115,30 @@ def login_view(request, user_type):
             )
 
     return render(request, f'users/login_{user_type}.html')
+
+
+
+def owner_dashboard(request):
+    # if the person requesting this view is not an owner
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login if not authenticated
+    
+    if not hasattr(request.user, 'owner'):
+        return redirect('home')  # Redirect to home if the user is not an owner
+    
+    # if not request.user.is_owner: 
+    #     # Tell them to fuck off
+    #     return redirect('home')
+    
+
+
+
+    # Save the owner in a variable
+    owner = request.user.owner 
+
+    # Get the restaurant from the db that belongs to the owner
+    restaurant = Restaurant.objects.filter(owner=owner).first()
+
+    context = {'restaurant': restaurant, }
+    return render(request, 'users/owner_dashboard.html', context)
+

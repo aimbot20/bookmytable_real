@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Add Menu Page
+{% endblock %}
+
+{% block content %}
+<h1>Manage Menu for {{ menu.restaurant.name }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Dish</button>
+</form>
+
+<h2>Existing Dishes</h2>
+<ul>
+    {% for dish in dishes %}
+        <li>{{ dish.D_Name }} - ${{ dish.D_Price }}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

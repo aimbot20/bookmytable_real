@@ -15,5 +15,7 @@ urlpatterns = [
     # Login routes
     path('<str:user_type>/login/', views.login_view, name='login'),
     
-    path('home/', views.home, name='home'), 
+    path('home/', views.home, name='home'),
+
+    path('dashboard/', views.owner_dashboard, name='owner_dashboard'), 
 ]

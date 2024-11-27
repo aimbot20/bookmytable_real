@@ -7,6 +7,8 @@ from django.utils import timezone
 class Restaurant(models.Model):
     R_ID = models.AutoField(primary_key=True)
     R_Name = models.CharField(max_length=100)
+    #One restaurant per owner
+    owner = models.OneToOneField('users.Owner', on_delete=models.CASCADE, related_name='restaurant')
     R_EmailAddress = models.EmailField(unique=True)
     R_ContactNumber = models.CharField(unique = True, max_length=15)
     R_Address = models.TextField() # this will allow for multiple addresses too
@@ -23,7 +25,7 @@ class Restaurant(models.Model):
         
 class Menu(models.Model): 
     M_ID = models.AutoField(primary_key = True)
-    M_TotalItems = models.IntegerField()
+    M_TotalItems = models.IntegerField(null = False, default = 0)
    # restaurant = models.ForeignKey('Restaurant', on_delete = models.CASCADE, related_name = 'menu')
 
    # I think restaurand and menu have a One-to-One relationship rather than One-to-Many relationship (foreign key)
