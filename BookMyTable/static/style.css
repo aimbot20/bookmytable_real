@@ -111,6 +111,33 @@ h1 {
     text-align: right;
 }
 
+
+.gap {
+    margin-bottom: 20px; /* Adjust the gap size as needed */
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.error-message {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 10px;
+    color: red;
+}
+
 /* .menu-btn:hover {
     background-color: #98989c;
 } */
@@ -246,9 +273,83 @@ footer p {
     text-align: right;
 
 }
+/* General Classes */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-/* 
-.close-btn:hover {
-    background-color: #98989c;
-} */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #092c52;
+}
+
+.button-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.button-secondary:hover {
+    background-color: #545b62;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.card {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.card-heading {
+    font-family: "Brush Script MT", cursive;
+    font-size: 2.5rem;
+    font-weight:lighter;
+    margin-bottom: 1rem;
+}
+
+.card-body {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+}
+
 

@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Profile - BookMyTable
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header text-center">My Profile </div>
+        <div class="flex-centre">
+            <p><strong>Username:</strong> {{ profile_data.username }}</p>
+            <p><strong>Email:</strong> {{ profile_data.email }}</p>
+            <p><strong>Contact Number:</strong> {{ profile_data.contact_number }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

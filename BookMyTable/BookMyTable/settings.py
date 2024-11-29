@@ -134,6 +134,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] #now it's gonna know that 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+#to redirect the user to login/signup page if they try to access some functionality 
+LOGIN_URL = '/users/'  # Or the appropriate path for your login page
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

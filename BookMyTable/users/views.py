@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .models import Customer, Owner
 from .models import Users  # Make sure this is correctly imported
 # from django.contrib.auth import login
 from restaurant.models import Restaurant
 from django.contrib.auth.hashers import check_password
+from reservation.models import Reservation
+from django.contrib.auth.decorators import login_required
+
 
 def home(request):
     # Get the user ID from the query parameters
@@ -143,3 +146,31 @@ def owner_dashboard(request):
     context = {'restaurant': restaurant, }
     return render(request, 'users/owner_dashboard.html', context)
 
+@login_required
+def profile(request):
+    user = request.user  # This is the logged-in user
+
+    # Initialize a dictionary to store profile data
+    profile_data = {
+        'username': user.username,
+        'email': user.email,
+        'contact_number': None,  # We'll set this based on the user type
+    }
+
+    # Check if the user is a Customer
+    if hasattr(user, 'customer'):
+        # Fetch customer-specific data
+        profile_data['contact_number'] = user.customer.contact_number
+
+    # Check if the user is an Owner
+    elif hasattr(user, 'owner'):
+        # Fetch owner-specific data
+        profile_data['contact_number'] = user.owner.contact_number
+
+    return render(request, 'users/profile.html', {'profile_data': profile_data})
+
+
+
+def logout_view(request):
+    logout(request)  # This logs the user out
+    return redirect('select_user_type')

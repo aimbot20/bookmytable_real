@@ -48,10 +48,11 @@
 
     <div class="dropdown-menu" id="dropdownMenu">
         <button class="close-btn" onclick="toggleMenu()">X</button>
-        <a href="#">Profile</a>
+        <a href="{% url 'profile' %}">Profile</a>
         <a href="#">My Reviews</a>
         <a href="#">My Reservations</a>
         <a href="#">Saved Restaurants</a>
+        <a href="#" onclick="confirmLogout()">Logout</a>
     </div>
     
 
@@ -69,17 +70,25 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Sidebar -->
+    <!-- JavaScript for drop down -->
     <script>
-        // function toggleSidebar() {
-        //     const sidebar = document.getElementById('sidebar');
-        //     sidebar.classList.toggle('active');
-        // }
+        
         function toggleMenu() {
             const menu = document.getElementById('dropdownMenu');
             menu.classList.toggle('active');
         }
 
     </script>
+
+     <!-- JavaScript for login confirmation -->
+    <script>
+        function confirmLogout() {
+            var confirmAction = confirm("Are you sure you want to log out?");
+            if (confirmAction) {
+                window.location.href = "{% url 'logout' %}";  // Redirect to the logout URL if confirmed
+            }
+        }
+    </script>
+
 </body>
 </html>
