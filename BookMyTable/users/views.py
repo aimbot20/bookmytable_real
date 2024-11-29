@@ -56,13 +56,14 @@ def signup(request, user_type):
             return redirect(reverse('home') + f'?user_id={customer.id}')
 
         elif user_type == 'owner':
-            Owner.objects.create_user(
+            owner = Owner.objects.create_user(
                 username=username,
                 email=email,
                 password=password,
                 contact_number=contact_number,
                 is_owner=True
             )
+            login(request, owner)
             return redirect('owner_dashboard')  # Redirect to user type selection after signup
 
     return render(request, f'users/signup_{user_type}.html')
