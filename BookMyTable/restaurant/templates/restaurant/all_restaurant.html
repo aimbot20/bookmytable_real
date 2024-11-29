@@ -1,20 +1,21 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Restaurant List Page
+Restaurant List - BookMyTable
 {% endblock %}
 
 {% block content %}
-<h2>BookMyTable Restaurant List Page</h2>
+<div class="container">
+    <h2 class="card-heading text-center">Restaurant List</h2>
 
-{% for r in restaurant_list %}
-    <div class="font-bold">
-        <!-- Pass user_id as query parameter in the URL -->
-        <a href="{% url 'restaurant_details' r.R_ID %}?user_id={{ user_id }}">
-            <button type="button" class="menu-btn">
-                <h3 class="text-2xl font-bold">{{ r.R_Name }}</h3>
-            </button>
-        </a>
-    </div>
-{% endfor %}
+    {% for r in restaurant_list %}
+      
+            <a href="{% url 'restaurant_details' r.R_ID %}?user_id={{ user_id }}">
+                <button type="button" class="button">
+                    <div style="font-size: 1rem;">{{ r.R_Name }} </div>
+                </button>
+            </a>
+
+    {% endfor %}
+</div>
 {% endblock %}

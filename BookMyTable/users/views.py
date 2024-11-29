@@ -8,6 +8,7 @@ from restaurant.models import Restaurant
 from django.contrib.auth.hashers import check_password
 from reservation.models import Reservation
 from django.contrib.auth.decorators import login_required
+from reservation.models import Reservation
 
 
 def home(request):
@@ -148,7 +149,7 @@ def owner_dashboard(request):
 
 @login_required
 def profile(request):
-    user = request.user  # This is the logged-in user
+    user = request.user 
 
     # Initialize a dictionary to store profile data
     profile_data = {
@@ -170,7 +171,22 @@ def profile(request):
     return render(request, 'users/profile.html', {'profile_data': profile_data})
 
 
-
+#logging out
 def logout_view(request):
-    logout(request)  # This logs the user out
+    logout(request)  
     return redirect('select_user_type')
+
+
+#my reservations
+@login_required
+def my_reservations(request):
+    user = request.user
+
+    if user.is_customer:
+        reservations = Reservation.objects.filter(customer=user)
+    elif user.is_owner:
+        reservations = Reservation.objects.filter(restaurant__owner=user)
+    else:
+        reservations = []
+
+    return render(request, 'users/my_reservations.html', {'reservations': reservations})

@@ -5,22 +5,24 @@ Reserve Table - {{ restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h2>Reserve a Table at {{ restaurant.R_Name }}</h2>
+<div class="container">
+    <h2 class="text-center">Reserve a Table at {{ restaurant.R_Name }}</h2>
 
-
-{% if tables %}
-    <div>
-        {% for table in tables %}
-            <a href="{% url 'reservation_details'  restaurant.R_ID table.T_ID %}?user_id={{ user_id }}">
-                <button class="table-button" style="background-color: {{ table.color }};">
-                    Table {{ table.T_ID }} ({{ table.T_SeatingCapacity }} seats)
-                </button>
-            </a>
-        {% endfor %}
-    </div>
-{% else %}
-    <p>No tables available for this restaurant.</p>
-{% endif %}
+    {% if tables %}
+        <div class="row justify-content-center">
+            {% for table in tables %}
+                <a href="{% url 'reservation_details' restaurant.R_ID table.T_ID %}?user_id={{ user_id }}" class="col-12 col-sm-6 col-md-4 mb-3">
+                    <!-- <button class="button" style="background-color: {{ table.color }};"> -->
+                    <button class="button"></button>
+                        Table {{ table.T_ID }} ({{ table.T_SeatingCapacity }} seats)
+                    </button>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No tables available for this restaurant.</p>
+    {% endif %}
+</div>
 
 <style>
     .table-button {

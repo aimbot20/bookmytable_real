@@ -138,52 +138,6 @@ h1 {
     color: red;
 }
 
-/* .menu-btn:hover {
-    background-color: #98989c;
-} */
-
-/* Sidebar styling */
-/* .sidebar {
-    position: fixed;
-    top: 0;
-    right: -250px;
-    width: 250px;
-    height: 100%;
-    background-color:#faf8f8;
-    padding-top: 1rem;
-    transition: left 0.3s ease-in-out;
-}
-
-.sidebar.active {
-    right: 0;
-}
-
-.sidebar a {
-    display: block;
-    padding: 1rem;
-    color: rgb(35, 23, 5);
-    text-decoration: none;
-    font-size: 1rem;
-}
-
-.sidebar a:hover {
-    background-color: #aaaaa9;
-    background-blend-mode: lighten;
-} */
-
-/* .close-btn {
-    background-color: #98989c;
-    border: none;
-    color:#faf8f8;
-    padding: 0.3rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-    margin-bottom: 1rem;
-    margin-left: 1rem;
-} */
-
 /* FOOTER COMPONENTS */
 footer {
     background-image: url("/static/images/header-bg.png");
@@ -228,7 +182,7 @@ footer p {
     background-image: url("/static/images/header-bg.png");
     background-size:cover;
     background-position: center;
-    top: -100%;                 /* Start hidden above the viewport */
+    top: -100%;                
     left: 0;
     width: 100%;
     color: #faf8f8;
@@ -334,8 +288,8 @@ footer p {
 }
 
 .card-header {
-    font-size: 1.25rem;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: lighter;
     margin-bottom: 1rem;
 }
 

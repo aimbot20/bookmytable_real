@@ -5,54 +5,55 @@ Restaurant Details - {{ restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<!-- Restaurant Name Centered on Top -->
-<h1 style="text-align: center; font-size: 3rem; margin-top: 20px;">{{ restaurant.R_Name }}</h1>
+<div class="container">
+    <!-- Restaurant Name Centered on Top -->
+    <h1 class="card-header text-center" style="font-size: 3rem; margin-top: 20px;">{{ restaurant.R_Name }}</h1>
 
-<!-- About Us Section -->
-<section style="margin: 40px 0; text-align: left;">
-    <h2>About Us</h2>
-    <p>{{ restaurant.R_Description }}</p>
-</section>
+    <!-- About Us Section -->
+    <section style="margin: 40px 0; text-align: left;">
+        <h2> About Us</h2>
+        <p>{{ restaurant.R_Description }}</p>
+    </section>
 
-<!-- Restaurant Timing and Location -->
-<section style="margin: 20px 0; text-align: center;">
-    <h3>Timings and Location</h3>
-    <p><strong>Opening Hours:</strong> {{ restaurant.R_OpenHours }}</p>
-    <p><strong>Address:</strong> {{ restaurant.R_Address }}</p>
-</section>
+    <!-- Restaurant Timing and Location -->
+    <section style="margin: 20px 0; text-align: center;">
+        <h3>Timings and Location</h3>
+        <p><strong>Opening Hours:</strong> {{ restaurant.R_OpenHours }}</p>
+        <p><strong>Address:</strong> {{ restaurant.R_Address }}</p>
+    </section>
 
-<!-- Menu Button with Expandable Content -->
-<section style="margin: 30px 0; text-align: center;">
-    <button id="toggleMenuButton" style="padding: 10px 20px; font-size: 1.2rem; cursor: pointer;">
-        Show Menu
-    </button>
-    <div id="menuSection" style="display: none; margin-top: 20px;">
-        <h3>Our Menu</h3>
-        {% if dishes %}
-            <ul>
-                {% for dish in dishes %}
-                    <li style="margin: 10px 0;">
-                        <strong>Name:</strong> {{ dish.D_Name }} <br>
-                        <strong>Price:</strong> ${{ dish.D_Price }} <br>
-                        <strong>Description:</strong> {{ dish.D_Description }} <br>
-                        <strong>Category:</strong> {{ dish.D_Category }} <br>
-                        <strong>Preparation Time:</strong> {{ dish.D_PrepTime }} minutes
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No dishes available for this restaurant.</p>
-        {% endif %}
-    </div>
-</section>
+    <!-- Menu Button with Expandable Content -->
+    <section style="margin: 30px 0; text-align: center;">
+        <button id="toggleMenuButton" class="button">
+            Show Menu
+        </button>
+        <div id="menuSection" style="display: none; margin-top: 20px;">
+            <h3>Our Menu</h3>
+            {% if dishes %}
+                <ul>
+                    {% for dish in dishes %}
+                        <li style="margin: 10px 0;">
+                            <strong>Name:</strong> {{ dish.D_Name }} <br>
+                            <strong>Price:</strong> ${{ dish.D_Price }} <br>
+                            <strong>Description:</strong> {{ dish.D_Description }} <br>
+                            <strong>Category:</strong> {{ dish.D_Category }} <br>
+                            <strong>Preparation Time:</strong> {{ dish.D_PrepTime }} minutes
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No dishes available for this restaurant.</p>
+            {% endif %}
+        </div>
+    </section>
 
-<!-- Book a Table Button -->
-<section style="margin: 50px 0; text-align: center;">
-    <a href="{% url 'reserve_table' restaurant.R_ID %}?user_id={{ user_id }}" class="btn btn-primary" 
-       style="padding: 15px 30px; font-size: 1.5rem;">
-        Book a Table
-    </a>
-</section>
+    <!-- Book a Table Button -->
+    <section style="margin: 50px 0; text-align: center;">
+        <a href="{% url 'reserve_table' restaurant.R_ID %}?user_id={{ user_id }}" class="button">
+            Book a Table
+        </a>
+    </section>
+</div>
 
 <!-- JavaScript for Toggle Functionality -->
 <script>
@@ -76,4 +77,5 @@ Restaurant Details - {{ restaurant.R_Name }}
         }
     });
 </script>
+
 {% endblock %}

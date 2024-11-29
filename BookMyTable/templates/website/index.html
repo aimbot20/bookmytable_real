@@ -1,28 +1,27 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Homepage
+Homepage - BookMyTable
 {% endblock %}
 
 {% block content %}
-<h1>
-    BookMyTable HomePage - Customer Side
-</h1>
-<p>Welcome to BookMyTable, where you can easily reserve your favorite table at any restaurant!</p>
+<div class="container">
+    <h2 class="card-heading text-center">Welcome to BookMyTable!</h2>
 
-{% if user %}
-    <p>Logged in as User ID: {{ user.id }}</p>
-{% else %}
-    <p><em>You are not logged in. Please log in to access more features.</em></p>
-{% endif %}
+    <h3 class=" text-center">Where you can easily reserve your favorite table at any restaurant!</h3>
 
-<!-- Button with added margin to move it further down -->
-<div class="button-container" style="margin-top: 30px;">
-    <a href="{% url 'all_restaurant' %}?user_id={{ user.id }}" 
-       class="btn btn-primary" 
-       style="padding: 10px 20px; text-decoration: none; color: white; background-color: blue; border-radius: 5px;">
-        View All Restaurants
-    </a>
+       <div class="gap"></div>
+    {% if user %}
+        <p class="text-center">Logged in as User ID: {{ user.id }}</p>
+    {% else %}
+        <p class="text-center"><em>You are not logged in. Please log in to access more features.</em></p>
+    {% endif %}
+    
+    <div class="gap"></div>
+    <div class="flex-center gap">
+        <a href="{% url 'all_restaurant' %}?user_id={{ user.id }}" class="button">
+            View All Restaurants
+        </a>
+    </div>
 </div>
-
 {% endblock %}
