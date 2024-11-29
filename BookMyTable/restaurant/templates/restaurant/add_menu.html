@@ -5,7 +5,8 @@ Add Menu Page
 {% endblock %}
 
 {% block content %}
-<h1>Manage Menu for {{ menu.restaurant.name }}</h1>
+<h1>Manage Menu for {{ menu.restaurant.R_Name }}</h1>
+<p>Total number of menu items: {{total_items}}</p>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

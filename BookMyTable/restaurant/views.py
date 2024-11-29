@@ -122,6 +122,9 @@ def add_menu(request):
             dish = form.save(commit=False)
             dish.menu = menu
             dish.save()
+
+            menu.M_TotalItems += 1
+            menu.save()  # Save the updated menu object
             return redirect('add_menu')  # Refresh the menu page
     else:
         form = DishForm()
@@ -131,6 +134,7 @@ def add_menu(request):
         'menu': menu,
         'form': form,
         'dishes': dishes,
+        'total_items': menu.M_TotalItems
     }
     return render(request, 'restaurant/add_menu.html', context)
 
