@@ -30,6 +30,7 @@ urlpatterns = [
     path('home/', views.home, name = 'home'),
     path('reservation/', include('reservation.urls')),
     path('payment/', include('payment.urls')),
+    path('interactions/', include('interactions.urls')),  
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
