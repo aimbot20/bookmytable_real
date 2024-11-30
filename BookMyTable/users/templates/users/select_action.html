@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+What Would You Like to Do? - BookMyTable
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header text-center">What would you like to do?</div>
+        <div class="card-body">
+            <p class="text-center">As a {{ user_type|title }}:</p>
+            <div class="gap"></div> 
+            <div class="flex-center">
+                <a href="{% url 'login' user_type %}">
+                    <button class="button">Login</button>
+                </a>
+                <a href="{% url 'signup' user_type %}">
+                    <button class="button" style="margin-left: 10px;">Signup</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

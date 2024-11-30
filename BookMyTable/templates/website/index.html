@@ -1,18 +1,27 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Homepage
+Homepage - BookMyTable
 {% endblock %}
 
 {% block content %}
-<h1>
-    BookMyTable HomePage - Customer side THIS IS ARHAMS WEBISTE eeeeeeee
-</h1>
+<div class="container">
+    <h2 class="card-heading text-center">Welcome to BookMyTable!</h2>
 
-<a href="{% url 'all_restaurant' %}" class="btn btn-primary" style="padding: 10px 20px; text-decoration: none; color: white; background-color: blue; border-radius: 5px;">
-    View All Restaurants
-</a>
+    <h3 class=" text-center">Where you can easily reserve your favorite table at any restaurant!</h3>
 
-{% endblock %} 
-
-
+       <div class="gap"></div>
+    {% if user %}
+        <p class="text-center">Logged in as User ID: {{ user.id }}</p>
+    {% else %}
+        <p class="text-center"><em>You are not logged in. Please log in to access more features.</em></p>
+    {% endif %}
+    
+    <div class="gap"></div>
+    <div class="flex-center gap">
+        <a href="{% url 'all_restaurant' %}?user_id={{ user.id }}" class="button">
+            View All Restaurants
+        </a>
+    </div>
+</div>
+{% endblock %}

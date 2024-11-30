@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Reservation Details - {{ reservation.restaurant.R_Name }}
+{% endblock %}
+
+{% block content %}
+<h2>Complete Your Payment at {{ reservation.restaurant.R_Name }}</h2>
+
+<p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
+<p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
+<p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+
+<h3>Select Payment Method</h3>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="payment_method" value="card">Pay with Card</button>
+    <button type="submit" name="payment_method" value="wallet">Pay with Wallet</button>
+</form>
+{% endblock %}

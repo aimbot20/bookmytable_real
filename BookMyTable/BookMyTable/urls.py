@@ -22,9 +22,15 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name = 'home'),
+    path('', include('users.urls')),
     path('contact/', views.contact, name = 'contact'),
     path('about/', views.about, name = 'about'),
     path('restaurant/', include('restaurant.urls')),
+    path('users/', include('users.urls')),
+    path('home/', views.home, name = 'home'),
+    path('reservation/', include('reservation.urls')),
+    path('payment/', include('payment.urls')),
+    path('interactions/', include('interactions.urls')),  
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

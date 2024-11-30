@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Welcome - BookMyTable
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-heading text-center">Welcome to BookMyTable</div>
+        <div class="card-body">
+            <p class="text-center">Are you a</p>
+            <div class="gap"></div> 
+            <div class="flex-center">
+                <a href="{% url 'select_action' 'customer' %}">
+                    <button class="button">Customer</button>
+                </a>
+                <a href="{% url 'select_action' 'owner' %}">
+                    <button class="button" style="margin-left: 10px;">Owner</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

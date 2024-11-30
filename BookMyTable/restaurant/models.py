@@ -7,6 +7,8 @@ from django.utils import timezone
 class Restaurant(models.Model):
     R_ID = models.AutoField(primary_key=True)
     R_Name = models.CharField(max_length=100)
+    #One restaurant per owner
+    owner = models.OneToOneField('users.Owner', on_delete=models.CASCADE, related_name='restaurant')
     R_EmailAddress = models.EmailField(unique=True)
     R_ContactNumber = models.CharField(unique = True, max_length=15)
     R_Address = models.TextField() # this will allow for multiple addresses too
@@ -23,14 +25,19 @@ class Restaurant(models.Model):
         
 class Menu(models.Model): 
     M_ID = models.AutoField(primary_key = True)
-    M_TotalItems = models.IntegerField()
-    restaurant = models.ForeignKey('Restaurant', on_delete = models.CASCADE, related_name = 'menu')
+    M_TotalItems = models.IntegerField(null = False, default = 0)
+   # restaurant = models.ForeignKey('Restaurant', on_delete = models.CASCADE, related_name = 'menu')
+
+   # I think restaurand and menu have a One-to-One relationship rather than One-to-Many relationship (foreign key)
+   # Because one restaurant should only have 1 menu
+    restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name='restaurant')
 
     def __str__(self):  #this will save the name of a res obj created in admin panel as the name given to it
         return f"{self.restaurant.R_Name} Menu"
 
 class Dish(models.Model):
     D_ID = models.AutoField(primary_key=True)
+    # One menu can have many dishes so dish and menu have a One-to-Many relationship
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='dishes')
     D_Name = models.CharField(max_length=100)
     D_Description = models.TextField(blank=True, null=True)
@@ -45,7 +52,7 @@ class Dish(models.Model):
 
 class Layout(models.Model):
     #this is a composition relation because the menu will get deleted if the restaurants gets deleted. 
-    restaurant = models.ForeignKey('Restaurant', on_delete=models.CASCADE, related_name='layouts') 
+    restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name='layout') 
 
 
 
@@ -59,7 +66,7 @@ class Coordinates(models.Model):
 class Component(models.Model): 
     Comp_ID = models.AutoField(primary_key = True)
     Comp_StartingCoordinates = models.ForeignKey('Coordinates', on_delete=models.CASCADE, related_name = 'coords')
-    layout = models.ForeignKey('Layout', on_delete = models.CASCADE, related_name='comp')
+    layout = models.ForeignKey('Layout', on_delete = models.CASCADE, related_name='components')
 
 
 class Window(Component):

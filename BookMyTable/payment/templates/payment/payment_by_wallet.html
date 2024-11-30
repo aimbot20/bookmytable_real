@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Payment by Wallet - {{ reservation.restaurant.R_Name }}
+{% endblock %}
+
+{% block content %}
+<h2>Payment by Wallet at {{ reservation.restaurant.R_Name }}</h2>
+
+<p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
+<p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
+<p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+
+{% if wallet and wallet.balance >= reservation.reservation_cost %}
+    <h3>You have enough balance to complete the payment.</h3>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Pay Now</button>
+    </form>
+{% elif wallet %}
+    <h3>Insufficient wallet balance. Your current balance is ${{ wallet.balance }}.</h3>
+    <p>Please add funds to your wallet to proceed with the payment.</p>
+{% else %}
+    <h3>No wallet found. Please create a wallet to proceed.</h3>
+{% endif %}
+{% endblock %}

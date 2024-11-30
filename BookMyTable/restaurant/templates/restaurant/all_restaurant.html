@@ -1,27 +1,21 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Restaurant List Page
+Restaurant List - BookMyTable
 {% endblock %}
 
 {% block content %}
-<h2>
-    BookMyTable Restaurant List Page
-</h2>
+<div class="container">
+    <h2 class="card-heading text-center">Restaurant List</h2>
 
-   {% for r in restaurant_list  %}
-        <div class = "font-bold ">
-            <a href ="{% url 'restaurant_details' r.R_ID %}">
-                <button type = "button"
-                class = "menu-btn">
-                    <!--<img src = "{{dish.image.url}}" alt = ""> # to insert an image -->
-                    <h3 class = "text-2xl font-bold"> {{r.R_Name}} </h3>
+    {% for r in restaurant_list %}
+      
+            <a href="{% url 'restaurant_details' r.R_ID %}?user_id={{ user_id }}">
+                <button type="button" class="button">
+                    <div style="font-size: 1rem;">{{ r.R_Name }} </div>
                 </button>
             </a>
-            
-        </div>
 
-    {% endfor %} 
-    
+    {% endfor %}
+</div>
 {% endblock %}
-
