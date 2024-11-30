@@ -115,9 +115,26 @@ def payment_by_wallet(request,  R_ID, T_ID, reservation_id):
 
     return render(request, "payment/payment_by_wallet.html", {"reservation": reservation})
 
+
 @login_required
 def payment_success(request, R_ID, T_ID, reservation_id):
+    # Fetch the reservation object
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+
+    # Get the latest payment associated with the reservation
+    payment = get_object_or_404(Payment, reservation=reservation)
+
+    # Update the table's is_reserved field to True when payment is successful
+    table = reservation.table
+    table.is_reserved = True
+    table.save()  # Save the updated table object
+
+    # Update the reservation's status to "Confirmed"
+    reservation.reservation_status = "Confirmed"
+    reservation.save()  # Save the updated reservation object
+
     return render(request, "payment/payment_success.html", {
+        "payment": payment,
         "reservation_id": reservation_id,
         "R_ID": R_ID,
         "T_ID": T_ID

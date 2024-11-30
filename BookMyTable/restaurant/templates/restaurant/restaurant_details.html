@@ -47,6 +47,7 @@ Restaurant Details - {{ restaurant.R_Name }}
         </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Book a Table Button -->
     <section style="margin: 50px 0; text-align: center;">
         <a href="{% url 'reserve_table' restaurant.R_ID %}?user_id={{ user_id }}" class="button">
@@ -54,7 +55,17 @@ Restaurant Details - {{ restaurant.R_Name }}
         </a>
     </section>
 </div>
+=======
+<!-- Book a Table Button -->
+<!-- Book a Table Button -->
+<section style="margin: 50px 0; text-align: center;">
+    <a href="{% url 'reservation:select_time' restaurant.R_ID %}?user_id={{ user_id }}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.5rem;">
+        Book a Table
+    </a>
+</section>
+>>>>>>> kainat
 
+                
 <!-- JavaScript for Toggle Functionality -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {

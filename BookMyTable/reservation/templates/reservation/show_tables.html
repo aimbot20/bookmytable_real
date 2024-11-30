@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Available Tables at {{ restaurant.R_Name }}
+{% endblock %}
+
+{% block content %}
+<h2>Available Tables at {{ restaurant.R_Name }}</h2>
+<p>Starting Time: {{ start_time }}</p>
+
+{% if available_tables or reserved_tables %}
+    <form method="POST">
+        {% csrf_token %}
+        
+        <h3>Available Tables</h3>
+        <div>
+            {% for table in available_tables %}
+                <button type="submit" class="table-button" name="table_id" value="{{ table.T_ID }}"
+                        style="background-color: lightblue;">
+                    Table {{ table.T_ID }} ({{ table.T_SeatingCapacity }} seats)
+                </button>
+            {% endfor %}
+        </div>
+
+        <h3>Reserved Tables</h3>
+        <div>
+            {% for table in reserved_tables %}
+                <button type="button" class="table-button" disabled
+                        style="background-color: lightcoral;">
+                    Table {{ table.T_ID }} ({{ table.T_SeatingCapacity }} seats)
+                </button>
+            {% endfor %}
+        </div>
+    </form>
+{% else %}
+    <p>No tables available at this time.</p>
+{% endif %}
+{% endblock %}
