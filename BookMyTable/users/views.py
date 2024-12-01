@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import check_password
 from reservation.models import Reservation
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from payment.models import Payment
 
 
 def home(request):
@@ -187,3 +188,26 @@ def my_reservations(request):
         reservations = []
 
     return render(request, 'users/my_reservations.html', {'reservations': reservations})
+
+
+@login_required
+def delete_reservation(request, reservation_id):
+    # Check if the user is an owner
+    if not request.user.is_authenticated or not request.user.is_owner:
+        return redirect('home')  # Redirect to home if not authenticated or not an owner
+
+    # Fetch the reservation by ID and ensure it belongs to a restaurant owned by this user
+    reservation = get_object_or_404(
+        Reservation,
+        id=reservation_id,
+        restaurant__owner=request.user.owner
+    )
+
+    # Fetch and delete the payment associated with this reservation
+    Payment.objects.filter(reservation=reservation).delete()
+
+    # Delete the reservation itself
+    reservation.delete()
+
+    # Redirect to the "My Reservations" page or any other desired page
+    return redirect('my_reservations')

@@ -17,10 +17,11 @@ My Reservations
                     <th>Starting Time</th>
                     <th>Ending Time</th>
                     <th>Status</th>
+                    {% if user.is_owner %}
+                    <th>Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
-            
-            
             <tbody>
                 {% for reservation in reservations %}
                 <tr>
@@ -30,6 +31,13 @@ My Reservations
                     <td>{{ reservation.starting_time }}</td>
                     <td>{{ reservation.ending_time }}</td>
                     <td>{{ reservation.reservation_status }}</td>
+                    {% if user.is_owner %}
+                    <td>
+                        <a href="{% url 'delete_reservation' reservation.id %}" class="btn btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
