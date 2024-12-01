@@ -1,4 +1,72 @@
 /* CSS STYLES */
+
+
+#layout-container {
+    max-width: 1000px;  
+    max-height: 500px; 
+    position: relative;
+    transform-origin: top left;
+    border: 2px solid black;
+    
+}
+
+
+.table {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(38, 165, 244);
+    position: absolute;
+    cursor: move;   /*this gives the diamon-like shape to the cursor */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%; /* Optional: makes the table appear circular */
+    color: white; /* Text color */
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+.saved_table {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(38, 165, 244);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%; /* Optional: makes the table appear circular */
+    color: white; /* Text color */
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+
+.table.reserved {
+    background-color: red;
+}
+
+.table.selected {
+    background-color: yellow;
+}
+
+
+
+.door, .window {
+    position: absolute;
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.door {
+    height: 5px; /* Fixed width */
+}
+
+.window {
+    height: 5px; /* Fixed width */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -96,17 +164,34 @@ h1 {
     text-align: right;
 }
 
+.button{
+    background-color: #98989c;
+    padding: 0.5rem 0.5rem;
+    cursor: pointer;
+    border-radius: 1px;
+    border-color: black;
+    top: 2%;
+    left:2%;
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    text-align: center;
+}
+
 .menu-btn {
     background-color:#faf8f8;
     padding: 0.5rem 0.5rem;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 1px;
+    border-color: black;
     top: 2%;
     left:2%;
     font-size: 35px;
     background: none;
     border: none;
-    color: white;
+    color: rgb(0, 0, 0);
     cursor: pointer;
     text-align: right;
 }

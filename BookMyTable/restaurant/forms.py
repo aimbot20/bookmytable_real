@@ -1,5 +1,5 @@
 from django import forms
-from .models import Restaurant, Menu, Dish
+from .models import Restaurant, Menu, Dish, Layout
 
 class RestaurantForm(forms.ModelForm):
     class Meta:
@@ -16,6 +16,13 @@ class DishForm(forms.ModelForm):
     class Meta:
         model = Dish
         fields = ['D_Name', 'D_Description', 'D_Price', 'D_PrepTime', 'D_Category']
+
+
+class LayoutForm(forms.ModelForm):
+    class Meta: 
+        model = Layout
+        fields = ['width', 'height']
+
 
 
         
