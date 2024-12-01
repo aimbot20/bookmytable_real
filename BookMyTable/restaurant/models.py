@@ -74,13 +74,13 @@ class Component(models.Model):
 
 #Changes: added a fixed width to Door 
 class Table(Component):
+    T_ID = models.AutoField(primary_key=True)
     #Defining enumeration class
     TableAvailability = [
         ('red', 'Reserved'),
         ('blue', 'Available'),
         ('yellow', 'Selected')
     ]
-    T_ID = models.AutoField(primary_key=True)
     T_SeatingCapacity = models.IntegerField()
     is_reserved = models.BooleanField(default=False)  # Track if the table is reserved
     color = models.CharField(max_length=6, default='blue', choices=TableAvailability)  # Options: 'red', 'blue', 'yellow'
