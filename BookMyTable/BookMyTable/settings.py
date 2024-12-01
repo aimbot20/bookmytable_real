@@ -151,4 +151,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'l226613@lhr.nu.edu.pk'  # Your Gmail address
-EMAIL_HOST_PASSWORD = '!@#123456!@#'       # Your Gmail password
+EMAIL_HOST_PASSWORD = 'hello'       # Your Gmail password
