@@ -6,6 +6,7 @@ from .models import Users  # Make sure this is correctly imported
 # from django.contrib.auth import login
 from restaurant.models import Restaurant
 from django.contrib.auth.hashers import check_password
+from django.shortcuts import get_object_or_404
 
 def home(request):
     # Get the user ID from the query parameters
@@ -126,18 +127,15 @@ def owner_dashboard(request):
     if not hasattr(request.user, 'owner'):
         return redirect('home')  # Redirect to home if the user is not an owner
     
-    # if not request.user.is_owner: 
-    #     # Tell them to fuck off
-    #     return redirect('home')
-    
-
-
 
     # Save the owner in a variable
     owner = request.user.owner 
 
     # Get the restaurant from the db that belongs to the owner
     restaurant = Restaurant.objects.filter(owner=owner).first()
+    
+    #restaurant = get_object_or_404(Restaurant, owner=request.user)
+    #return render(request, 'your_template.html', {'restaurant': restaurant})
 
     context = {'restaurant': restaurant, }
     return render(request, 'users/owner_dashboard.html', context)

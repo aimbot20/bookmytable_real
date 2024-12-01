@@ -1,0 +1,378 @@
+{% extends "layout.html" %} 
+
+{% load static %}
+
+
+{% block title %}
+Manage Layout
+{% endblock%}
+
+
+
+
+
+
+
+
+<!--CONTENT BLOCKKK-->
+{% block content %}
+
+<h2>Layout</h2>
+<br><br>
+
+
+
+<!--enter the dimensions of the layout in the form passed through the manage_layout view-->
+<form id= "layout-form" method="POST">    <!--a POST request is used for sending data securely -->
+
+    {% csrf_token %}    <!--Generates a CSRF token to protect against Cross-Site Request Forgery attacks.-->
+    
+
+    {% if editing_disabled %}
+        <!-- Render existing layout -->
+        <div id="layout-container" 
+             style="width: {{ layout.width }}px; height: {{ layout.height }}px; border: 2px solid black;">
+            {% for table in tables %}
+                <div class="saved_table" 
+                     style="position: absolute; 
+                            left: {{ table.x_position }}px; 
+                            top: {{ table.y_position }}px; 
+                            background-color: {{ table.color }};
+                            color: white;">
+                    <span style="position: relative;">
+                        {{ table.T_SeatingCapacity }}
+                    </span>
+                </div>
+            {% endfor %}
+        </div>
+    
+    
+    
+    
+    
+
+   {% else %}
+        {{ form.as_p }}  <!-- This will render the form fields -->
+        
+
+        <input type="hidden" name="tables" id="tables-data">    <!--Stores table data in JSON format to send it with the form-->
+
+        <button type="button" id="confirm-dimensions">Confirm dimensions</button>
+
+        <div id="layout-container" class = "layout-container" 
+        style="display: none; width: {{ width }}px; height: {{ height }}px; "></div>
+
+
+        <div>
+            <button type = "button" id="add-table" style="display: none;">Add Table</button>
+        </div>
+
+
+
+
+
+
+        <div id="table-settings" style="display: none;">
+            <label for="seating-capacity">Seating Capacity:</label>
+            <select id="seating-capacity">
+                <option value="0" selected>0</option>
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="6">6</option>
+            </select>
+            <button type = "button" id="confirm-table" style="display: none;">Confirm Table</button>
+        </div>
+
+
+        <button type="submit" id="save-layout" style="display: none;">Save Layout</button>
+
+    {% endif %}
+    
+</form>
+
+
+
+
+
+
+{%comment%} The following is a more dynamic way of adding the layout {%endcomment%}
+
+<script>
+
+    let selectedTable = null;
+    let isTableConfirmed = true;
+
+
+
+
+    {% comment %} function isOverlapping(newTable, existingTable) {
+        const newTableRect = {
+            x1: parseInt(newTable.dataset.x_position),
+            y1: parseInt(newTable.dataset.y_position),
+            x2: parseInt(newTable.dataset.x_position) + parseInt(newTable.dataset.width),
+            y2: parseInt(newTable.dataset.y_position) + parseInt(newTable.dataset.height),
+        };
+    
+        const existingTableRect = {
+            x1: parseInt(existingTable.dataset.x_position),
+            y1: parseInt(existingTable.dataset.y_position),
+            x2: parseInt(existingTable.dataset.x_position) + parseInt(existingTable.dataset.width),
+            y2: parseInt(existingTable.dataset.y_position) + parseInt(existingTable.dataset.height),
+        };
+    
+        // Check for overlap
+        return !(
+            newTableRect.x2 <= existingTableRect.x1 || // newTable is to the left
+            newTableRect.x1 >= existingTableRect.x2 || // newTable is to the right
+            newTableRect.y2 <= existingTableRect.y1 || // newTable is above
+            newTableRect.y1 >= existingTableRect.y2    // newTable is below
+        );
+    }
+
+    selectedTable.addEventListener('mouseup', function () {
+        // Get all other tables
+        const allTables = document.querySelectorAll('.table');
+        let validPlacement = true;
+    
+        allTables.forEach((otherTable) => {
+            if (selectedTable !== otherTable && isOverlapping(selectedTable, otherTable)) {
+                validPlacement = false;
+            }
+        });
+    
+        if (!validPlacement) {
+            alert('Cannot place table here! It overlaps with another table.');
+            // Reset the table to its previous position
+            selectedTable.style.left = selectedTable.dataset.x_position + 'px';
+            selectedTable.style.top = selectedTable.dataset.y_position + 'px';
+        } else {
+            // Update position attributes
+            selectedTable.dataset.x_position = parseInt(selectedTable.style.left);
+            selectedTable.dataset.y_position = parseInt(selectedTable.style.top);
+        }
+    }); {% endcomment %}
+
+
+    document.getElementById('confirm-dimensions').addEventListener('click', function () {
+        const width = document.getElementById('id_width').value;  // Get the width from the form
+        const height = document.getElementById('id_height').value;  // Get the height from the form
+
+        console.log("Width:", width);
+        console.log("Height:", height);
+    
+        // Render the layout rectangle based on the confirmed dimensions
+        const layoutRectangle = document.getElementById('layout-container');
+        layoutRectangle.style.width = `${width}px`;
+        layoutRectangle.style.height = `${height}px`;
+        layoutRectangle.style.display = 'block';  // Show the rectangle
+    
+        // Show the Save button to submit the form
+        document.getElementById('add-table').style.display = 'block';
+        document.getElementById('save-layout').style.display = 'inline-block';
+    });
+
+
+
+
+    /*Selects the HTML element with the ID add-table (a button in this case) using document.getElementById.
+    Adds an event listener to it that listens for a click event.
+    If the button (add-table) is clicked, it performs the given function*/
+    document.getElementById('add-table').addEventListener('click', function () 
+    {
+        if (!isTableConfirmed) {
+            alert("Please confirm the current table before adding a new one.");
+            return;  // Exit the function if the table is not confirmed yet
+        }
+
+
+
+        console.log("Add Table button clicked");
+        //e.preventDefault();  // Prevent form submission or page reload
+
+        //creates a div element
+        const table = document.createElement('div');
+        //Adds the CSS class table to the newly created div element. This class will style the element based on the associated CSS rules.
+        table.classList.add('table');
+        table.style.position = 'absolute';
+        table.style.left = '0px';
+        table.style.top = '0px';
+        
+    
+
+        //Retrieves the element with the ID layout-container (the container where the layout is displayed) and assigns it to the layoutContainer variable.
+        const layoutContainer = document.getElementById('layout-container');
+        // To make the table appear inside the container basically makes the layout container the parent container
+        layoutContainer.appendChild(table);
+        
+
+        // Store initial position and dimensions in dataset
+        table.dataset.x_position = 0; // Initial X-coordinate
+        table.dataset.y_position = 0; // Initial Y-coordinate
+        table.dataset.width = table.offsetWidth; // Element's width (CSS width must be set)
+        table.dataset.height = table.offsetHeight; // Element's height
+        
+        
+        selectedTable = table;     
+
+        //the following will make the 'table-settings' block visible so the owner can adjust seating capacity
+        document.getElementById('table-settings').style.display = 'block';
+
+        document.getElementById('confirm-table').style.display = 'inline';
+
+
+        isTableConfirmed = false;
+    });
+
+    
+    
+
+    document.getElementById('seating-capacity').addEventListener('change', function () 
+    {
+        
+        if (!selectedTable) 
+            return; 
+    
+        const seatingCapacity = this.value; // Get the selected value
+    
+        // Update the table's data attribute for seating capacity
+        selectedTable.dataset.seatingCapacity = seatingCapacity;
+    
+        // Update the displayed seating capacity in the table
+        let seatingSpan = selectedTable.querySelector('.seating-capacity');
+    
+        // If the span doesn't exist (first time), create it
+        if (!seatingSpan) {
+            seatingSpan = document.createElement('span');
+            seatingSpan.classList.add('seating-capacity');
+            selectedTable.appendChild(seatingSpan);
+        }
+    
+        seatingSpan.textContent = seatingCapacity; // Update the text
+    });
+
+
+    // When the user confirms the table, save the seating capacity
+    document.getElementById('confirm-table').addEventListener('click', function () {
+
+        isTableConfirmed = true;
+
+        // Hide the seating capacity dropdown and confirm button
+        document.getElementById('table-settings').style.display = 'none';
+        document.getElementById('confirm-table').style.display = 'none';
+    });
+
+
+
+    // DRAGGING TABLES AROUNDD LESGOOO 
+    document.getElementById('layout-container').addEventListener('mousedown', function (e) {
+        
+        if (!selectedTable) // Don't drag if no table is selected
+        return;
+
+        const layoutContainer = document.getElementById('layout-container');
+        const containerRect = layoutContainer.getBoundingClientRect(); // Get the bounding box of the container
+
+        const offsetX = e.clientX  - selectedTable.offsetLeft;
+        const offsetY = e.clientY  - selectedTable.offsetTop;
+        
+
+        function onMouseMove(e) {
+            //selectedTable.style.left = `${e.clientX - offsetX}px`; //${expression} is a template literal to embed JavaScript expressions inside strings.
+            //selectedTable.style.top = `${e.clientY - offsetY}px`; 
+
+            const layoutContainer = document.getElementById('layout-container');
+            const containerRect = layoutContainer.getBoundingClientRect(); // Get the bounding box of the container
+            const tableRect = selectedTable.getBoundingClientRect(); // Get the bounding box of the table
+
+            // Calculate the new position of the table
+            let newLeft = e.clientX - offsetX;
+            let newTop = e.clientY - offsetY;
+
+            // Check horizontal boundaries
+            if (newLeft < 0) //If the new position is beyond the left boundary 
+                newLeft = 0; // Keep it as zero
+            
+            
+            
+            else if (newLeft + tableRect.width > containerRect.width) {
+                newLeft = containerRect.width - tableRect.width-4; // Prevent moving beyond the right boundary
+            }
+
+            // Check vertical boundaries
+        
+            if (newTop < 0) {
+                newTop = 0; // Prevent moving beyond the top boundary
+            } 
+            
+            
+            else if (newTop + tableRect.height > containerRect.height) {
+                newTop = containerRect.height - tableRect.height- 4; // Prevent moving beyond the bottom boundary
+            }
+
+            // Apply the constrained positions
+            selectedTable.style.left = `${newLeft}px`;
+            selectedTable.style.top = `${newTop}px`;
+        }
+
+        function onMouseUp() 
+        {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+
+            // Save the position (when the mouse is released)
+            const x_position = parseInt(selectedTable.style.left);
+            const y_position = parseInt(selectedTable.style.top);
+            
+            selectedTable.dataset.x_position = x_position;
+            selectedTable.dataset.y_position = y_position;
+        }
+
+
+       // if (!selectedTable) // Don't drag if no table is selected
+       //     return; 
+    
+       // const offsetX = e.clientX - selectedTable.offsetLeft; //Calculates the horizontal distance between the mouse pointer (e.clientX) and the left edge of the selectedTable.
+       // const offsetY = e.clientY - selectedTable.offsetTop; 
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+
+
+
+    });
+
+
+
+    // Before submitting the form, gather the table data and append to the hidden input field
+    document.getElementById('layout-form').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission
+        
+        const tablesData = [];
+        
+        // Collect the data from each table
+        const tables = document.querySelectorAll('.table');
+        tables.forEach(function (table) {
+            tablesData.push({
+                seating_capacity: table.dataset.seatingCapacity,
+                x_position: table.dataset.x_position,
+                y_position: table.dataset.y_position
+            });
+        });
+
+        // Store the tables data in the hidden input field
+        document.getElementById('tables-data').value = JSON.stringify(tablesData);
+
+        // Submit the form
+        this.submit();
+    });
+
+
+    
+    
+  
+
+
+</script>
+
+
+{% endblock %}

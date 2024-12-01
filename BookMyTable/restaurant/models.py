@@ -53,39 +53,71 @@ class Dish(models.Model):
 class Layout(models.Model):
     #this is a composition relation because the menu will get deleted if the restaurants gets deleted. 
     restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name='layout') 
+    width = models.IntegerField(default= 0)  # Layout width in pixels or grid units
+    height = models.IntegerField(default= 0)  # Layout height in pixels or grid units
 
 
+
+
+
+class Component(models.Model): 
+    #This is an abstract class to serve as an interface for different components and allow for Open-Close Principle
+    x_position = models.IntegerField(null=True, blank=True, default = 0)
+    y_position = models.IntegerField(null=True, blank=True, default = 0)
+    layout = models.ForeignKey('Layout', on_delete = models.CASCADE, related_name='components')
+    type = models.CharField(max_length=50)
+    
+    class Meta: 
+        abstract = True
+
+
+
+#Changes: added a fixed width to Door 
+class Table(Component):
+    #Defining enumeration class
+    TableAvailability = [
+        ('red', 'Reserved'),
+        ('blue', 'Available'),
+        ('yellow', 'Selected')
+    ]
+    T_ID = models.AutoField(primary_key=True)
+    T_SeatingCapacity = models.IntegerField()
+    is_reserved = models.BooleanField(default=False)  # Track if the table is reserved
+    color = models.CharField(max_length=6, default='blue', choices=TableAvailability)  # Options: 'red', 'blue', 'yellow'
+    layout = models.ForeignKey(Layout, on_delete=models.CASCADE, related_name='tables')
+    type = models.CharField(max_length=50, default='table', editable=False)
+
+    def __str__(self):
+        return f"Table {self.T_ID} - {self.T_SeatingCapacity} seats"
+
+
+
+
+#Changes: added a fixed width to Window the __str__ function
+class Window(Component):
+    W_Length = models.IntegerField()
+    W_Width = models.IntegerField(default = 5)
+    layout = models.ForeignKey(Layout, on_delete=models.CASCADE, related_name='windows')
+    type = models.CharField(max_length=50, default='window', editable=False)
+    
+    def __str__(self):
+        return f"Door at ({self.x_position}, {self.y_position}) - Length: {self.W_Length}"
+
+
+
+#Changes: added a fixed width to Door and a __str__ function
+class Door(Component):
+    D_Length = models.IntegerField()
+    D_Width = models.IntegerField(default = 5)
+    layout = models.ForeignKey(Layout, on_delete=models.CASCADE, related_name='doors')
+    type = models.CharField(max_length=50, default='door', editable=False)
+    
+    def __str__(self):
+        return f"Door at ({self.x_position}, {self.y_position}) - Length: {self.W_Length}"
 
 
 class Coordinates(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
-
-
-
-class Component(models.Model): 
-    Comp_ID = models.AutoField(primary_key = True)
-    Comp_StartingCoordinates = models.ForeignKey('Coordinates', on_delete=models.CASCADE, related_name = 'coords')
-    layout = models.ForeignKey('Layout', on_delete = models.CASCADE, related_name='components')
-
-
-class Window(Component):
-    W_Length = models.IntegerField()
-    
-
-class Door(Component):
-    D_Length = models.IntegerField()
-
-class Table(Component):
-    #Defining enumeration class
-    TableAvailability = [
-        ('red', 'unavailable'),
-        ('blue', 'available')
-    ]
-    T_ID = models.AutoField(primary_key=True)
-    T_SeatingCapacity = models.IntegerField()
-    is_reserved = models.BooleanField(default=False)  # Track if the table is reserved
-    color = models.CharField(max_length=4, default='blue', choices=TableAvailability)  # Options: 'red', 'blue', 'yellow'
-
 
 

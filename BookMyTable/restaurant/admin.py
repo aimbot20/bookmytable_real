@@ -4,9 +4,10 @@ from .models import Restaurant
 from .models import Menu
 from .models import Dish
 from .models import Layout
-from .models import Component
+from .models import Window
 from .models import Coordinates
 from .models import Table
+from .models import Door
 
 
 
@@ -48,8 +49,9 @@ class MenuAdmin(admin.ModelAdmin):
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(Layout)
-admin.site.register(Component)
 admin.site.register(Table)
+admin.site.register(Door)
+admin.site.register(Window)
 admin.site.register(Coordinates)
 
 

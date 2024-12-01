@@ -1,16 +1,26 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Onwer side dashboard
+Owner side dashboard
 {% endblock %}
 
 {% block content %}
 <h2>Owner's Dashboard</h2>
 
 {% if restaurant %}
-    <p>Restaurant: {{ restaurant.name }}</p>
+    
+    <p>{{ restaurant.R_Name }}</p>
+
+    <!--
+    Anchoring URLS:
+    When you click on the button, it'll take you to the specified url. 
+    And that URL will have a view which it will use to render its specific html page    
+    -->
     <a href="{% url 'add_menu' %}">Manage Menu</a>
     <a href="{% url 'add_or_edit_restaurant' %}">Edit Restaurant Details</a>
+    <a href="{% url 'manage_layout' %}">Manage Layout</a>   <!--should lead to the Add_Layout Page-->
+
+
 {% else %}
     <a href="{% url 'add_or_edit_restaurant' %}">Create Restaurant</a>
 {% endif %}

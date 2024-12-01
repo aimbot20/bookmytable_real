@@ -1,15 +1,18 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Add_Edit_Restaurant Page
+Add/Edit Restaurant Page
 {% endblock %}
 
 {% block content %}
 <h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Restaurant</h1>
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save</button>
 </form>
+
+
 
 {% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% load static %} <!--to load the static files e.g. CSS, JS etc.-->
+
+{% block content %}
+<div id="layout-container" 
+
+     data-layout-id="{{ layout.id }}" 
+     style="width: {{ layout.width }}px; height: {{ layout.height }}px; position: relative; border: 1px solid black;">
+    
+    
+    {% for component in layout.components.all %}
+        <div class="component" 
+            data-id="{{ component.id }}" 
+            data-type="{{ component.type }}" 
+            data-seating-capacity="{{ component.seating_capacity|default:'' }}" 
+            data-color="{{ component.color|default:'blue' }}"
+            data-length="{{ component.length|default:'' }}"
+            style="position: absolute; left: {{ component.x }}px; top: {{ component.y }}px;">
+            {% if component.type == 'table' %}
+                Table ({{ component.seating_capacity }} seats)
+            {% elif component.type == 'door' %}
+                Door
+            {% elif component.type == 'window' %}
+                Window
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<button id="add-table">Add Table</button>
+<button id="save-layout">Save Layout</button>
+
+<div id="csrf-container">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+</div>
+
+
+
+
+<script src="{% static 'restaurant/layout.js' %}"></script>
+
+<script>
+    // Example of dynamically adding tables
+    let tableCount = 0;
+
+    function addTable() {
+        tableCount++;
+    
+        const container = document.getElementById('layout-container'); // Make sure this is the correct container, not 'table-container'
+        const newTable = document.createElement('div');
+        newTable.classList.add('component'); // Add 'component' class for dragging
+        newTable.setAttribute('data-id', `table_${tableCount}`);
+        newTable.setAttribute('data-type', 'table');
+        newTable.setAttribute('data-seating-capacity', document.getElementById(`table_${tableCount}_seating_capacity`).value);
+        newTable.setAttribute('data-color', document.getElementById(`table_${tableCount}_color`).value);
+        newTable.setAttribute('style', 'position: absolute; left: 0px; top: 0px;'); // Initial position
+    
+        newTable.innerHTML = `
+            Table (Seats: ${document.getElementById(`table_${tableCount}_seating_capacity`).value})
+        `;
+        
+        container.appendChild(newTable);
+    
+        // Reinitialize dragging for the new table
+        initializeDrag(newTable);
+    }
+    
+    // Function to initialize drag for dynamically added tables
+    function initializeDrag(component) {
+        component.addEventListener('mousedown', function (e) {
+            let dragged = this;
+            const offsetX = e.clientX - dragged.offsetLeft;
+            const offsetY = e.clientY - dragged.offsetTop;
+    
+            function onMouseMove(e) {
+                dragged.style.left = `${e.clientX - offsetX}px`;
+                dragged.style.top = `${e.clientY - offsetY}px`;
+            }
+    
+            function onMouseUp() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+    
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+    }
+    
+</script>
+
+
+
+{% endblock %}
+
+
