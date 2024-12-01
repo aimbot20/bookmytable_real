@@ -5,10 +5,10 @@ My Reservations
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="card-header text-center">My Reservations</h1>
+<div class="myreservations_table-container">
+    <h2 class="card-header text-center">My Reservations</h2>
     {% if reservations %}
-        <table class="table">
+        <table class="myreservations_table">
             <thead>
                 <tr>
                     <th>#</th>
@@ -19,6 +19,8 @@ My Reservations
                     <th>Status</th>
                 </tr>
             </thead>
+            
+            
             <tbody>
                 {% for reservation in reservations %}
                 <tr>

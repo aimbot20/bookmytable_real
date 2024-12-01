@@ -103,7 +103,9 @@ def select_time(request, R_ID):
 #     })
 
 
+# -------------->> ARHAM'S WORKING CODE RAHHHHHHH <<------------------------
 def show_tables(request, R_ID, start_time):
+
     # Get the restaurant object
     restaurant = get_object_or_404(Restaurant, pk=R_ID)
 
@@ -140,9 +142,15 @@ def show_tables(request, R_ID, start_time):
     # print the two lists here 
     print("Available Tables:", [f"Table ID: {t.T_ID}, Capacity: {t.T_SeatingCapacity}" for t in available_tables])
     print("Reserved Tables:", [f"Table ID: {t.T_ID}, Capacity: {t.T_SeatingCapacity}" for t in reserved_tables])
+   
+   
     # Handle POST request for table reservation
     if request.method == 'POST':
         table_id = request.POST.get('table_id')
+        if not table_id:
+            return HttpResponse("No table ID provided", status=400)
+    
+
         table = get_object_or_404(Table, pk=table_id)
 
         # Check if the table is in the reserved list
@@ -168,5 +176,6 @@ def show_tables(request, R_ID, start_time):
         'start_time': start_time_obj.strftime('%I:%M %p'),
         'available_tables': available_tables,
         'reserved_tables': reserved_tables,
+        'layout': layout,
     })
 

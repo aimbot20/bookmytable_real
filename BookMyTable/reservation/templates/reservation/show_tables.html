@@ -8,8 +8,51 @@ Available Tables at {{ restaurant.R_Name }}
 <h2>Available Tables at {{ restaurant.R_Name }}</h2>
 <p>Starting Time: {{ start_time }}</p>
 
+
 {% if available_tables or reserved_tables %}
-    <form method="POST">
+
+<form method="POST">
+    {% csrf_token %}
+
+    <!--creating a layout rectangle first-->
+    <div id="layout-container" 
+    style="width: {{ layout.width }}px; height: {{ layout.height }}px; border: 2px solid black;">
+
+
+
+    {% for table in available_tables %}
+        <div class="available_table" id="table_{{ table.T_ID }}"
+             style="left: {{ table.x_position }}px; 
+                    top: {{ table.y_position }}px; 
+                    padding: 5px; 
+                    text-align: center;">
+            <span style="position: relative;">
+                {{ table.T_SeatingCapacity }} Seats
+            </span>
+        </div>
+    {% endfor %}
+    
+    <input type="hidden" id="selected_table_id" name="table_id" value="">
+    
+    {% for table in reserved_tables %}
+        <div class="reserved_table" 
+            style="left: {{ table.x_position }}px; 
+                    top: {{ table.y_position }}px; 
+                    padding: 5px; 
+                    text-align: center;">
+            <span style="position: relative;">
+                {{ table.T_SeatingCapacity }} Seats
+            </span>
+        </div>
+    {% endfor %}
+
+    </div>
+
+    <div style="margin-top: 20px;">
+    <button type="submit" id="proceed">Proceed</button>
+    </div>
+
+    {% comment %} <form method="POST">
         {% csrf_token %}
         
         <h3>Available Tables</h3>
@@ -31,8 +74,61 @@ Available Tables at {{ restaurant.R_Name }}
                 </button>
             {% endfor %}
         </div>
-    </form>
+    </form> {% endcomment %}
+
+</form> 
 {% else %}
     <p>No tables available at this time.</p>
 {% endif %}
+
+
+
+<script>
+    let lastSelectedTable = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get all table elements
+        const tables = document.querySelectorAll(".available_table");
+    
+        // Loop through each table and add a click event listener
+        tables.forEach(tableElement => {
+            tableElement.addEventListener("click", function() {
+                selectTable(tableElement);
+            });
+        });
+
+
+        const proceedButton = document.getElementById("proceed");
+        proceedButton.addEventListener("click", function() {
+            if (lastSelectedTable) {
+                // You can handle form submission or further logic here
+                alert("Proceeding with table ID: " + lastSelectedTable.id);
+                // You can use a hidden form to send the selected table ID if needed
+            }
+        });
+
+
+    });
+
+    function selectTable(tableElement) {
+        // If a table was previously selected, reset its color to blue
+        if (lastSelectedTable && lastSelectedTable !== tableElement) {
+            lastSelectedTable.style.backgroundColor = 'rgb(38, 165, 244)';
+        }
+
+        // Set the selected table's color to yellow
+        tableElement.style.backgroundColor = 'rgb(211, 211, 28)';
+
+        // Update the last selected table reference
+        lastSelectedTable = tableElement;
+
+
+         // Update the hidden input value with the selected table's ID
+        const selectedTableIdInput = document.getElementById("selected_table_id");
+        selectedTableIdInput.value = tableElement.id.split("_")[1]; // Extract table ID from element's ID
+    }
+</script>
+
+
+
 {% endblock %}

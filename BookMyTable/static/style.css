@@ -1,5 +1,47 @@
 /* CSS STYLES */
 
+.myreservations_table-container {
+    margin: 20px auto;
+    max-width: 90%;
+    overflow-x: auto; /* Adds horizontal scrolling for small screens */
+}
+
+.myreservations_table {
+    width: 100%;
+    border-collapse: collapse; /* Removes default spacing between table cells */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: left; /* Aligns text to the left */
+}
+
+.myreservations_table th, .table td {
+    padding: 12px 15px; /* Adds padding to cells */
+    border: 1px solid #ddd; /* Adds a light border */
+}
+
+.myreservations_table th {
+    background-color: #f4f4f4; /* Light gray background for header */
+    color: #333; /* Dark text for readability */
+    font-weight: bold; /* Bold text for header */
+}
+
+.myreservations_table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray background for even rows */
+}
+
+.myreservations_table tr:nth-child(odd) {
+    background-color: #fff; /* White background for odd rows */
+}
+
+.myreservations_table tr:hover {
+    background-color: #f1f1f1; /* Highlight row on hover */
+}
+
+.myreservations_table td {
+    color: #555; /* Slightly dark text for table data */
+}
+
+
 
 #layout-container {
     max-width: 1000px;  
@@ -41,7 +83,52 @@
     font-weight: bold;
 }
 
+.available_table {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(38, 165, 244);
+    cursor:context-menu;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%; /* Optional: makes the table appear circular */
+    color: white; /* Text color */
+    font-size: 15px;
+    font-weight: bold;
+}
 
+
+.reserved_table {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(185, 7, 7);
+    position: absolute;
+    cursor:context-menu;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%; /* Optional: makes the table appear circular */
+    color: white; /* Text color */
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+.selected_table {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(211, 211, 28);
+    position: absolute;
+    cursor:context-menu;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%; /* Optional: makes the table appear circular */
+    color: white; /* Text color */
+    font-size: 25px;
+    font-weight: bold;
+}
 
 .table.reserved {
     background-color: red;
