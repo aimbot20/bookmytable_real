@@ -3,9 +3,22 @@ from django.http import HttpResponse
 from .models import Payment, PaymentByCard, PaymentByWallet, Card
 from reservation.models import Reservation
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from .models import Users
 
-# im using a standard cost for all reservations rn 
+
 STANDARD_RESERVATION_COST = 50  
+
+def send_notification_email(user, subject, message):
+    send_mail(
+        subject,
+        message,
+        'l226613@lhr.nu.edu.pk',  # Replace with your email
+        [user.email],
+        fail_silently=False,
+    )
+# im using a standard cost for all reservations rn 
+
 
 # View to display payment options (Card or Wallet)
 @login_required
@@ -116,6 +129,34 @@ def payment_by_wallet(request,  R_ID, T_ID, reservation_id):
     return render(request, "payment/payment_by_wallet.html", {"reservation": reservation})
 
 
+# @login_required
+# def payment_success(request, R_ID, T_ID, reservation_id):
+#     # Fetch the reservation object
+#     reservation = get_object_or_404(Reservation, id=reservation_id)
+
+#     # Get the latest payment associated with the reservation
+#     payment = get_object_or_404(Payment, reservation=reservation)
+
+#     # Update the table's is_reserved field to True when payment is successful
+#     table = reservation.table
+#     table.is_reserved = True
+#     table.save()  # Save the updated table object
+
+#     # Update the reservation's status to "Confirmed"
+#     reservation.reservation_status = "Confirmed"
+#     reservation.save()  # Save the updated reservation object
+
+    
+
+#     return render(request, "payment/payment_success.html", {
+#         "payment": payment,
+#         "reservation_id": reservation_id,
+#         "R_ID": R_ID,
+#         "T_ID": T_ID
+#     })
+
+
+
 @login_required
 def payment_success(request, R_ID, T_ID, reservation_id):
     # Fetch the reservation object
@@ -132,6 +173,19 @@ def payment_success(request, R_ID, T_ID, reservation_id):
     # Update the reservation's status to "Confirmed"
     reservation.reservation_status = "Confirmed"
     reservation.save()  # Save the updated reservation object
+
+    # Send email notification to the customer
+    subject = "Reservation Payment Successful"
+    message = (
+        f"Dear {reservation.customer.username},\n\n"
+        f"Your payment for the reservation at {reservation.restaurant.R_Name} has been successfully processed.\n"
+        f"Reservation Details:\n"
+        f"Table: {reservation.table.T_ID}\n"
+        f"Starting Time: {reservation.starting_time}\n"
+        f"Ending Time: {reservation.ending_time}\n\n"
+        "Thank you for choosing our service! if you donot come to eat we will eat you"
+    )
+    send_notification_email(reservation.customer, subject, message)
 
     return render(request, "payment/payment_success.html", {
         "payment": payment,
