@@ -214,13 +214,17 @@ def delete_reservation(request, reservation_id):
 
     # Redirect to the "My Reservations" page or any other desired page
     return redirect('my_reservations')
+
+
 def my_review(request):
     user = request.user  # Get the currently logged-in user
 
-    # Fetch all reviews created by the user
-    reviews = Review.objects.filter(user=user)
-
-    for review in reviews:
-        print(f'Review ID: {review.review_id}') 
+    # Check if the user is a customer or owner
+    if user.is_customer:
+        # Fetch reviews created by the customer
+        reviews = Review.objects.filter(user=user)
+    elif user.is_owner:
+        # Fetch reviews for the restaurant(s) owned by the owner
+        reviews = Review.objects.filter(restaurant__owner=user)
 
     return render(request, 'users/my_review.html', {'reviews': reviews})

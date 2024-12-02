@@ -26,9 +26,9 @@
     <!-- Header -->
     <header>
         <div class="header-title">
-            <a href="/" class="logo-link">
-                 <h1 class="logo">Book My Table</h1>
-            </a>
+            <a href="{% if user.is_customer %}{% url 'all_restaurant' %}{% elif user.is_owner %}{% url 'owner_dashboard' %}{% else %}{% url 'select_user_type' %}{% endif %}" class="logo-link">
+                <h1 class="logo">Book My Table</h1>
+            </a>                        
             <p class="catchphrase">Your perfect dining experience</p>
         </div>
     
@@ -39,14 +39,22 @@
         </div>
     </header>
    
+    <!-- Dropdown Menu -->
     <div class="dropdown-menu" id="dropdownMenu">
         <button class="close-btn" onclick="toggleMenu()">X</button>
         <a href="{% url 'profile' %}">Profile</a>
         <a href="{% url 'my_review' %}">My Reviews</a>
         <a href="{% url 'my_reservations' %}">My Reservations</a>
-        <a href="{% url 'interactions:list_saved_restaurants'%}">Saved Restaurants</a>
+        
+        <!-- Show this link only if the user is a customer -->
+        {% if request.user.is_customer %}
+            <a href="{% url 'interactions:list_saved_restaurants' %}">Saved Restaurants</a>
+        {% endif %}
+        
+        <!-- Logout Link for both -->
         <a href="#" onclick="confirmLogout()">Logout</a>
     </div>
+
     
 
     <!-- Main Content -->
