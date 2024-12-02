@@ -5,27 +5,31 @@ Select Reservation Time at {{ restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h2>Select Reservation Time at {{ restaurant.R_Name }}</h2>
+<div class="container">
+    <h2 class="card-header text-center">Select Reservation Time at {{ restaurant.R_Name }}</h2>
 
-<form method="POST">
-    {% csrf_token %}
-    
-    <label for="start_time">Select Start Time</label>
-    <select id="start_time" name="start_time" required>
-        <option value="" disabled selected>Select a time</option>
-        <option value="1 PM">1 PM</option>
-        <option value="2 PM">2 PM</option>
-        <option value="3 PM">3 PM</option>
-        <option value="4 PM">4 PM</option>
-        <option value="5 PM">5 PM</option>
-        <option value="6 PM">6 PM</option>
-        <option value="8 PM">8 PM</option>
-        <option value="9 PM">9 PM</option>
-        <option value="10 PM">10 PM</option>
-        <option value="11 PM">11 PM</option>
-    </select>
-    
-    <button type="submit" class="btn btn-primary">Show Available Tables</button>
-</form>
-
+    <form method="POST">
+        {% csrf_token %}
+        <div class="gap"></div>
+        <div class="form-group">
+            <label for="start_time">Select Start Time</label>
+            <select id="start_time" name="start_time" class="form-control" required>
+                <option value="" disabled selected>Select a time</option>
+                <option value="1 PM">1 PM</option>
+                <option value="2 PM">2 PM</option>
+                <option value="3 PM">3 PM</option>
+                <option value="4 PM">4 PM</option>
+                <option value="5 PM">5 PM</option>
+                <option value="6 PM">6 PM</option>
+                <option value="8 PM">8 PM</option>
+                <option value="9 PM">9 PM</option>
+                <option value="10 PM">10 PM</option>
+                <option value="11 PM">11 PM</option>
+            </select>
+        </div>
+        <div class="gap"></div>
+        
+        <button type="submit" class="btn btn-primary btn-block">Show Available Tables</button>
+    </form>
+</div>
 {% endblock %}
