@@ -8,8 +8,11 @@ from restaurant.models import Restaurant
 from django.contrib.auth.hashers import check_password
 from reservation.models import Reservation
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
 from payment.models import Payment
+from reservation.models import Reservation
+from interactions.models import Review
+from django.shortcuts import get_object_or_404
+
 
 
 def home(request):
@@ -211,3 +214,13 @@ def delete_reservation(request, reservation_id):
 
     # Redirect to the "My Reservations" page or any other desired page
     return redirect('my_reservations')
+def my_review(request):
+    user = request.user  # Get the currently logged-in user
+
+    # Fetch all reviews created by the user
+    reviews = Review.objects.filter(user=user)
+
+    for review in reviews:
+        print(f'Review ID: {review.review_id}') 
+
+    return render(request, 'users/my_review.html', {'reviews': reviews})

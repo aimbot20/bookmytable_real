@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Saved Restaurants
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="card-heading text-center">Your Saved Restaurants</h2>
+
+    {% if saved_restaurants %}
+        <ul class="list-group">
+            {% for saved in saved_restaurants %}
+                <li class="list-group-item d-flex flex-column align-items-start">
+                    <!-- Restaurant name as a button -->
+                    <a href="{% url 'restaurant_details' saved.restaurant.R_ID %}" class="button text-center">
+                        {{ saved.restaurant.R_Name }}
+                    </a>
+                    <div class="gap"></div>
+                    <!-- Remove from saved link -->
+                    <a href="{% url 'interactions:remove_saved_restaurant' saved.id %}" class="btn btn-danger btn-sm w-100">
+                        Remove from Saved
+                    </a>
+                    <div class="gap"></div>
+                    <div class="gap"></div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="alert alert-info">You have no saved restaurants.</p>
+    {% endif %}
+</div>
+{% endblock %}

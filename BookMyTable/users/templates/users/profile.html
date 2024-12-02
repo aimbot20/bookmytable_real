@@ -7,7 +7,7 @@ Profile - BookMyTable
 {% block content %}
 <div class="container">
     <div class="card">
-        <div class="card-header text-center">My Profile </div>
+        <div class="card-heading text-center">My Profile </div>
         <div class="flex-centre">
             <p><strong>Username:</strong> {{ profile_data.username }}</p>
             <p><strong>Email:</strong> {{ profile_data.email }}</p>
@@ -16,3 +16,18 @@ Profile - BookMyTable
     </div>
 </div>
 {% endblock %}
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table th, .table td {
+        padding: 10px;
+        border: 1px solid #ddd; /* Adds border around each cell */
+        text-align: center;
+    }
+    .table th {
+        background-color: #f8f9fa;
+    }
+</style>

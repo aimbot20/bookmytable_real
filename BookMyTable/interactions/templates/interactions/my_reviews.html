@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+My Reviews
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="card-heading text-center">My Reviews</h2>
+
+    {% if reviews %}
+    <ul class="list-group">
+        {% for review in reviews %}
+        <li class="list-group-item">
+            <h5>{{ review.restaurant.R_Name }}</h5>
+            <p><strong>Rating:</strong> {{ review.rating }} / 5</p>
+            <p><strong>Comment:</strong> {{ review.comment }}</p>
+            <!-- <a href="{% url 'update_review' review.id %}" class="button">Edit Review</a>
+            <a href="{% url 'delete_review' review.id %}" class="button">Delete Review</a> -->
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>You have not reviewed any restaurants yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

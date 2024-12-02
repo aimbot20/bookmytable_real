@@ -6,12 +6,33 @@ Restaurant Details - {{ restaurant.R_Name }}
 
 {% block content %}
 <div class="container">
-    <!-- Restaurant Name Centered on Top -->
-    <h1 class="card-header text-center" style="font-size: 3rem; margin-top: 20px;">{{ restaurant.R_Name }}</h1>
+    <!-- Restaurant Name and Heart Icon -->
+    <div class="card-header text-center" style="font-size: 3rem; margin-top: 20px; position: relative;">
+        <h1>{{ restaurant.R_Name }}</h1>
+
+        <!-- Heart Icon (Saved or not saved) -->
+        <div style="position: absolute; top: 10px; right: 10px;">
+            {% if user.is_authenticated %}
+                {% if is_saved %}
+                    <!-- Filled Heart (Saved) -->
+                    <a href="{% url 'interactions:save_restaurant' restaurant.R_ID %}" class="text-red-500">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                {% else %}
+                    <!-- Empty Heart (Not Saved) -->
+                    <a href="{% url 'interactions:save_restaurant' restaurant.R_ID %}" class="text-gray-500">
+                        <i class="far fa-heart"></i>
+                    </a>
+                {% endif %}
+            {% else %}
+                <p>You need to log in to save this restaurant.</p>
+            {% endif %}
+        </div>
+    </div>
 
     <!-- About Us Section -->
     <section style="margin: 40px 0; text-align: left;">
-        <h2> About Us</h2>
+        <h2>About Us</h2>
         <p>{{ restaurant.R_Description }}</p>
     </section>
 
@@ -47,15 +68,20 @@ Restaurant Details - {{ restaurant.R_Name }}
         </div>
     </section>
 
-<!-- Book a Table Button -->
-<!-- Book a Table Button -->
-<section style="margin: 50px 0; text-align: center;">
-    <a href="{% url 'reservation:select_time' restaurant.R_ID %}?user_id={{ user_id }}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.5rem;">
-        Book a Table
-    </a>
-</section>
+    <!-- Book a Table Button -->
+    <section style="margin: 50px 0; text-align: center;">
+        <a href="{% url 'reservation:select_time' restaurant.R_ID %}?user_id={{ user_id }}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.5rem;">
+            Book a Table
+        </a>
+    </section>
 
-                
+    <!-- Add Review Button -->
+    <section style="margin: 50px 0; text-align: center;">
+        <a href="{% url 'interactions:add_review' restaurant.R_ID %}?user_id={{ user_id }}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.5rem;">
+            Add a Review
+        </a>
+    </section>
+
 <!-- JavaScript for Toggle Functionality -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {

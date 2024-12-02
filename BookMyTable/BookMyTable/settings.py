@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'payment',
     'reservation',
     'interactions',
-    
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -143,6 +142,8 @@ LOGIN_URL = '/users/'  # Or the appropriate path for your login page
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 
 
