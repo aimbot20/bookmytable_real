@@ -13,7 +13,7 @@ def send_notification_email(user, subject, message):
     send_mail(
         subject,
         message,
-        'l226613@lhr.nu.edu.pk',  # Replace with your email
+        'bookmytable9@gmail.com',  # Replace with your email
         [user.email],
         fail_silently=False,
     )
