@@ -33,10 +33,19 @@
         </div>
     
         <div class="header-right">
-            <input type="text" placeholder=" Search....    " class="search-bar">
-            <!-- <button class="menu-btn" onclick="toggleSidebar()">☰</button> -->
+            <form action="{% url 'interactions:search_restaurant' %}" method="get" style="display: inline;">
+                <input 
+                    type="text" 
+                    name="q" 
+                    placeholder="Search...      " 
+                    class="search-bar" 
+                    value="{{ request.GET.q|default:'' }}"
+                >
+                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+            </form>
             <button class="menu-btn" onclick="toggleMenu()">☰</button>
         </div>
+        
     </header>
    
     <!-- Dropdown Menu -->

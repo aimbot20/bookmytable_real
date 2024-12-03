@@ -16,5 +16,7 @@ urlpatterns = [
    path('remove-saved-restaurant/<int:saved_id>/', views.remove_saved_restaurant, name='remove_saved_restaurant'),
  
    path('saved-restaurants/', views.list_saved_restaurants, name='list_saved_restaurants'),
-
+   
+   path('search/', views.search_restaurant, name='search_restaurant'),
+   
 ]

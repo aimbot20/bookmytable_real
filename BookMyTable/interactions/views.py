@@ -131,3 +131,15 @@ def list_saved_restaurants(request):
     else:
         # Redirect to login page if user is not authenticated
         return redirect('login')
+    
+
+def search_restaurant(request):
+    query = request.GET.get('q', '')
+    restaurants = Restaurant.objects.filter(R_Name__icontains=query)  # Filter restaurants based on search query
+    
+    # Debugging: print to check if the data is correct
+    print(f"Search query: {query}, Found {restaurants.count()} restaurants.")
+
+    return render(request, 'interactions/search_restaurants.html', {
+        'restaurants': restaurants
+    })

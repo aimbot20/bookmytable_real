@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}Search Results - {{ query }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for restaurant in restaurants %}
+    <div class="restaurant-item">
+        <h2>{{ restaurant.R_Name }}</h2>
+        {% if restaurant.R_ID %}
+            <a href="{% url 'restaurant_details' restaurant.R_ID %}">View Details</a>
+        {% else %}
+            <p>No restaurants available</p>
+        {% endif %}
+    </div>
+</div>   
+{% endfor %}
+
+{% endblock %}
