@@ -14,12 +14,10 @@ Restaurant Details - {{ restaurant.R_Name }}
         <div style="position: absolute; top: 10px; right: 10px;">
             {% if user.is_authenticated %}
                 {% if is_saved %}
-                    <!-- Filled Heart (Saved) -->
                     <a href="{% url 'interactions:save_restaurant' restaurant.R_ID %}" class="text-red-500">
                         <i class="fas fa-heart"></i>
                     </a>
                 {% else %}
-                    <!-- Empty Heart (Not Saved) -->
                     <a href="{% url 'interactions:save_restaurant' restaurant.R_ID %}" class="text-gray-500">
                         <i class="far fa-heart"></i>
                     </a>
@@ -68,6 +66,28 @@ Restaurant Details - {{ restaurant.R_Name }}
         </div>
     </section>
 
+    <!-- Reviews Button with Expandable Content -->
+    <section style="margin: 30px 0; text-align: center;">
+        <button id="toggleReviewsButton" class="button">
+            Show Reviews
+        </button>
+        <div id="reviewsSection" style="display: none; margin-top: 20px;">
+            <h3>Reviews</h3>
+            {% if reviews %}
+                <ul>
+                    {% for review in reviews %}
+                        <li style="margin: 10px 0;">
+                            <strong>Rating:</strong> {{ review.rating }}/5 <br>
+                            <strong>Comment:</strong> {{ review.comment }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No reviews available for this restaurant.</p>
+            {% endif %}
+        </div>
+    </section>
+
     <!-- Book a Table Button -->
     <section style="margin: 50px 0; text-align: center;">
         <a href="{% url 'reservation:select_time' restaurant.R_ID %}?user_id={{ user_id }}" class="btn btn-primary" style="padding: 15px 30px; font-size: 1.5rem;">
@@ -81,14 +101,17 @@ Restaurant Details - {{ restaurant.R_Name }}
             Add a Review
         </a>
     </section>
+</div>
 
 <!-- JavaScript for Toggle Functionality -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const toggleMenuButton = document.getElementById('toggleMenuButton');
         const menuSection = document.getElementById('menuSection');
+        const toggleReviewsButton = document.getElementById('toggleReviewsButton');
+        const reviewsSection = document.getElementById('reviewsSection');
 
-        // Ensure toggle button and menu section exist
+        // Toggle Menu
         if (toggleMenuButton && menuSection) {
             toggleMenuButton.addEventListener('click', () => {
                 if (menuSection.style.display === 'none' || menuSection.style.display === '') {
@@ -99,8 +122,19 @@ Restaurant Details - {{ restaurant.R_Name }}
                     toggleMenuButton.innerText = 'Show Menu';
                 }
             });
-        } else {
-            console.error('Toggle button or menu section is missing!');
+        }
+
+        // Toggle Reviews
+        if (toggleReviewsButton && reviewsSection) {
+            toggleReviewsButton.addEventListener('click', () => {
+                if (reviewsSection.style.display === 'none' || reviewsSection.style.display === '') {
+                    reviewsSection.style.display = 'block';
+                    toggleReviewsButton.innerText = 'Hide Reviews';
+                } else {
+                    reviewsSection.style.display = 'none';
+                    toggleReviewsButton.innerText = 'Show Reviews';
+                }
+            });
         }
     });
 </script>

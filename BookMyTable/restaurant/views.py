@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import RestaurantForm, MenuForm, DishForm, LayoutForm
 from django.http import JsonResponse
 import json
+from interactions.models import Review
 
 
 def restaurant_list(request):
@@ -21,12 +22,18 @@ def restaurant_details(request, R_ID):
     print(f"R_ID: {R_ID}, Query Params: {request.GET}")
     user_id = request.GET.get('user_id')  # Capture user_id from the query parameter
     restaurant = get_object_or_404(Restaurant, pk=R_ID)
+    
+    # Fetch menu and dishes
     menu = Menu.objects.filter(restaurant=restaurant).first()
     dishes = Dish.objects.filter(menu=menu) if menu else []
+
+    # Fetch reviews for the restaurant
+    reviews = Review.objects.filter(restaurant=restaurant)
 
     return render(request, 'restaurant/restaurant_details.html', {
         'restaurant': restaurant,
         'dishes': dishes,
+        'reviews': reviews,  # Pass reviews to the template
         'user_id': user_id
     })
 

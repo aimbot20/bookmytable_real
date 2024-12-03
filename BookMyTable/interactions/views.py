@@ -39,25 +39,6 @@ def add_review(request, restaurant_id):
         'user_id': request.user.id
     })
 
-# to update a review
-# def update_review(request, review_id):
-#     review = get_object_or_404(Review, review_id=review_id, user=request.user)
-    
-#     if request.method == "POST":
-#         rating = request.POST.get("rating")
-#         comment = request.POST.get("comment")
-        
-#         # Update the review
-#         review.rating = rating
-#         review.comment = comment
-#         review.save()
-        
-#         return render(request, "interactions/update_review.html", {
-#             "review": review,
-#             'success_message': "Review updated successfully!"
-#         })
-
-#     return render(request, "interactions/update_review.html", {"review": review})
 
 # to edit a review
 def edit_review(request, review_id):
@@ -84,7 +65,7 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, review_id=review_id, user=request.user)
     review.delete()
 
-    return redirect('users:my_review')
+    return redirect('my_review')
 
 
 
