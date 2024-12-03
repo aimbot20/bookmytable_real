@@ -7,7 +7,7 @@ from django.http import HttpResponse
 
 @login_required
 def select_time(request, R_ID):
-    # Get the restaurant object
+    
     restaurant = get_object_or_404(Restaurant, pk=R_ID)
     
     if request.method == "POST":
@@ -18,7 +18,6 @@ def select_time(request, R_ID):
         # Redirect to the show_tables view, passing the restaurant and selected time
         return redirect('reservation:show_tables', R_ID=R_ID, start_time=start_time)
     
-    # Available hours (you can adjust this based on your needs)
     available_hours = ['1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM']
 
     return render(request, 'reservation/select_time.html', {
@@ -40,10 +39,8 @@ def show_tables(request, R_ID, start_time):
     except ValueError:
         return HttpResponse("Invalid time format", status=400)
 
-    # Get the layout associated with the restaurant
     layout = get_object_or_404(Layout, restaurant=restaurant)
 
-    # Get all tables associated with the layout
     all_tables = Table.objects.filter(layout=layout)
 
     # Separate tables into available and reserved lists
@@ -68,14 +65,12 @@ def show_tables(request, R_ID, start_time):
     print("Available Tables:", [f"Table ID: {t.T_ID}, Capacity: {t.T_SeatingCapacity}" for t in available_tables])
     print("Reserved Tables:", [f"Table ID: {t.T_ID}, Capacity: {t.T_SeatingCapacity}" for t in reserved_tables])
    
-   
-    # Handle POST request for table reservation
+
     if request.method == 'POST':
         table_id = request.POST.get('table_id')
         if not table_id:
             return HttpResponse("No table ID provided", status=400)
     
-
         table = get_object_or_404(Table, pk=table_id)
 
         # Check if the table is in the reserved list

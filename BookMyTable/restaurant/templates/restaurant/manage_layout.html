@@ -16,6 +16,7 @@ Manage Layout
 
 <!--CONTENT BLOCKKK-->
 {% block content %}
+<div class="container">
 
 <h2>Layout</h2>
 <br><br>
@@ -328,11 +329,6 @@ Manage Layout
         }
 
 
-       // if (!selectedTable) // Don't drag if no table is selected
-       //     return; 
-    
-       // const offsetX = e.clientX - selectedTable.offsetLeft; //Calculates the horizontal distance between the mouse pointer (e.clientX) and the left edge of the selectedTable.
-       // const offsetY = e.clientY - selectedTable.offsetTop; 
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
@@ -374,5 +370,5 @@ Manage Layout
 
 </script>
 
-
+</div>
 {% endblock %}

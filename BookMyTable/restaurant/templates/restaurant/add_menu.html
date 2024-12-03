@@ -1,24 +1,31 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Add Menu Page
+Add Menu Page - {{ menu.restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h1>Manage Menu for {{ menu.restaurant.R_Name }}</h1>
-<p>Total number of menu items: {{total_items}}</p>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add Dish</button>
-</form>
+<div class="container">
+    <h1 class="card-heading text-center">Manage Menu for {{ menu.restaurant.R_Name }}</h1>
+    <p class="text-center">Total number of menu items: {{ total_items }}</p>
 
-<h2>Existing Dishes</h2>
-<ul>
-    {% for dish in dishes %}
-        <li>{{ dish.D_Name }} - ${{ dish.D_Price }}</li>
-    {% endfor %}
-</ul>
+    <div class="menu-form">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Add Dish</button>
+            </div>
+        </form>
+    </div>
 
-
+    <h2 class="mt-4">Existing Dishes</h2>
+    <ul class="list-group">
+        {% for dish in dishes %}
+            <li class="list-group-item">{{ dish.D_Name }} - ${{ dish.D_Price }}</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

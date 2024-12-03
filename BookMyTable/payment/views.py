@@ -6,50 +6,52 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from .models import Users
 
-
-STANDARD_RESERVATION_COST = 50  
+# im using a standard cost for all reservations rn 
+STANDARD_RESERVATION_COST = 5  
 
 def send_notification_email(user, subject, message):
     send_mail(
         subject,
         message,
-        'bookmytable9@gmail.com',  # Replace with your email
+        'bookmytable9@gmail.com', 
         [user.email],
         fail_silently=False,
     )
-# im using a standard cost for all reservations rn 
 
 
 # View to display payment options (Card or Wallet)
 @login_required
-def payment_page(request,  R_ID, T_ID, reservation_id):
+def payment_page(request, R_ID, T_ID, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
 
-    # Ensure the reservation belongs to the logged-in user
-    if reservation.customer != request.user:
-        return HttpResponse("You are not authorized to make payment for this reservation.")
+    reservation_cost = STANDARD_RESERVATION_COST
 
     if request.method == "POST":
         payment_method = request.POST.get("payment_method")
         if payment_method == "card":
             return redirect('payment_by_card', R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
         elif payment_method == "wallet":
-            return redirect("payment_by_wallet",R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
+            return redirect("payment_by_wallet", R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
 
-    return render(request, "payment/payment_page.html", {"reservation": reservation})
+    # Pass the reservation cost and other details to the template
+    return render(
+        request,
+        "payment/payment_page.html",
+        {"reservation": reservation, "reservation_cost": reservation_cost}
+    )
+
 
 # View to process payment via card
 @login_required
 def payment_by_card(request, R_ID, T_ID, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
 
-    reservation_cost = STANDARD_RESERVATION_COST
-
-
-    # Ensure the reservation belongs to the logged-in user
     if reservation.customer != request.user:
         return HttpResponse("You are not authorized to make payment for this reservation.")
 
+    reservation_cost = STANDARD_RESERVATION_COST
+
+    # Fetches user’s saved cards
     user_cards = Card.objects.filter(customer=request.user)
 
     if request.method == "POST":
@@ -67,7 +69,7 @@ def payment_by_card(request, R_ID, T_ID, reservation_id):
                 status="Completed"
             )
             payment.confirm_payment()
-            return redirect("payment_success",R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id )
+            return redirect("payment_success", R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
 
         elif card_option == "new_card":
             card_number = request.POST.get("new_card_number")
@@ -77,6 +79,7 @@ def payment_by_card(request, R_ID, T_ID, reservation_id):
             if not all([card_number, expiry_date, cardholder_name]):
                 return HttpResponse("All fields are required for adding a new card.")
 
+            # Saving new card 
             new_card = Card.objects.create(
                 customer=request.user,
                 card_number=card_number,
@@ -96,10 +99,13 @@ def payment_by_card(request, R_ID, T_ID, reservation_id):
             payment.confirm_payment()
             return redirect("payment_success", R_ID=R_ID, T_ID=T_ID, reservation_id=reservation.id)
 
+ 
     return render(request, "payment/payment_by_card.html", {
         "reservation": reservation,
-        "user_cards": user_cards
+        "reservation_cost": reservation_cost,  
+        "user_cards": user_cards,
     })
+
 
 # View to process payment via wallet
 @login_required
@@ -107,14 +113,12 @@ def payment_by_wallet(request,  R_ID, T_ID, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
     reservation_cost = STANDARD_RESERVATION_COST
 
-    # Ensure the reservation belongs to the logged-in user
     if reservation.customer != request.user:
         return HttpResponse("You are not authorized to make payment for this reservation.")
 
     if request.method == "POST":
         amount = reservation_cost
 
-        # Deduct amount from wallet
         if request.user.deduct_from_wallet(amount):
             payment = PaymentByWallet.objects.create(
                 amount=amount,
@@ -129,52 +133,23 @@ def payment_by_wallet(request,  R_ID, T_ID, reservation_id):
     return render(request, "payment/payment_by_wallet.html", {"reservation": reservation})
 
 
-# @login_required
-# def payment_success(request, R_ID, T_ID, reservation_id):
-#     # Fetch the reservation object
-#     reservation = get_object_or_404(Reservation, id=reservation_id)
-
-#     # Get the latest payment associated with the reservation
-#     payment = get_object_or_404(Payment, reservation=reservation)
-
-#     # Update the table's is_reserved field to True when payment is successful
-#     table = reservation.table
-#     table.is_reserved = True
-#     table.save()  # Save the updated table object
-
-#     # Update the reservation's status to "Confirmed"
-#     reservation.reservation_status = "Confirmed"
-#     reservation.save()  # Save the updated reservation object
-
-    
-
-#     return render(request, "payment/payment_success.html", {
-#         "payment": payment,
-#         "reservation_id": reservation_id,
-#         "R_ID": R_ID,
-#         "T_ID": T_ID
-#     })
-
-
-
+# View for payment success
 @login_required
 def payment_success(request, R_ID, T_ID, reservation_id):
-    # Fetch the reservation object
+   
     reservation = get_object_or_404(Reservation, id=reservation_id)
-
-    # Get the latest payment associated with the reservation
     payment = get_object_or_404(Payment, reservation=reservation)
 
-    # Update the table's is_reserved field to True when payment is successful
+    # Updating the table's is_reserved field to True when payment is successful
     table = reservation.table
     table.is_reserved = True
-    table.save()  # Save the updated table object
+    table.save()  
 
-    # Update the reservation's status to "Confirmed"
+    # Updating the reservation's status to "Confirmed"
     reservation.reservation_status = "Confirmed"
-    reservation.save()  # Save the updated reservation object
+    reservation.save()  
 
-    # Send email notification to the customer
+    # Sending email notification to the customer
     subject = "Reservation Payment Successful"
     message = (
         f"Dear {reservation.customer.username},\n\n"

@@ -7,11 +7,11 @@ def add_review(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, R_ID=restaurant_id)
 
     if request.method == "POST":
-        # Extract rating and comment from the form
+
         rating = request.POST.get("rating")
         comment = request.POST.get("comment")
         
-        # Check if the user has already reviewed the restaurant
+        # Check if  user has already reviewed the restaurant
         review, created = Review.objects.get_or_create(
             user=request.user,
             restaurant=restaurant,
@@ -38,6 +38,7 @@ def add_review(request, restaurant_id):
         'restaurant': restaurant, 
         'user_id': request.user.id
     })
+
 
 
 # to edit a review
@@ -80,16 +81,6 @@ def view_reviews(request, restaurant_id):
     })
 
 
-# my reviews
-# def my_reviews(request):
-#     # Fetch reviews made by the current user
-#     reviews = Review.objects.filter(user=request.user)
-
-#     # Pass reviews to the template
-#     return render(request, "interactions/my_reviews.html", {
-#         "reviews": reviews
-#     })
-
 # to save a restaurant
 def save_restaurant(request, restaurant_id):
     if request.user.is_authenticated:
@@ -120,7 +111,7 @@ def remove_saved_restaurant(request, saved_id):
         return redirect('login')
     
 
-
+# to view all saved restaurants
 def list_saved_restaurants(request):
     if request.user.is_authenticated:
         # Fetch the saved restaurants for the current logged-in user
@@ -133,6 +124,7 @@ def list_saved_restaurants(request):
         return redirect('login')
     
 
+# to search
 def search_restaurant(request):
     query = request.GET.get('q', '')
     restaurants = Restaurant.objects.filter(R_Name__icontains=query)  # Filter restaurants based on search query

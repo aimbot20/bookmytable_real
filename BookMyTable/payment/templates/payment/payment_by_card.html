@@ -5,38 +5,47 @@ Payment by Card - {{ reservation.restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h2>Payment by Card at {{ reservation.restaurant.R_Name }}</h2>
+<div class="container">
+    <h2 class="card-heading text-center">Payment by Card at {{ reservation.restaurant.R_Name }}</h2>
 
-<p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
-<p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
-<p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+    <div class="reservation-details">
+        <p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
+        <p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
+        <p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+    </div>
 
-<h3>Choose Your Payment Option</h3>
-<form method="post">
-    {% csrf_token %}
-    <label for="card_option">Use an Existing Card:</label>
-    <select id="card_option" name="card_id">
-        {% for card in user_cards %}
-            <option value="{{ card.id }}">{{ card.cardholder_name }} - {{ card.card_number|slice:"-4:" }}</option>
-        {% empty %}
-            <option>No cards available, please add one</option>
-        {% endfor %}
-    </select><br><br>
-    <button type="submit" name="card_option" value="existing_card">Pay Now</button>
-</form>
+    <h3 class="mt-4">Choose Your Payment Option</h3>
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="card_option">Use an Existing Card:</label>
+            <select id="card_option" name="card_id" class="form-control">
+                {% for card in user_cards %}
+                    <option value="{{ card.id }}">{{ card.cardholder_name }} - **** **** **** {{ card.card_number|slice:"-4:" }}</option>
+                {% empty %}
+                    <option>No cards available, please add one</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" name="card_option" value="existing_card" class="btn btn-primary mt-3">Pay Now</button>
+    </form>
 
-<h3>Add a New Card</h3>
-<form method="post">
-    {% csrf_token %}
-    <label for="new_card_number">Card Number:</label>
-    <input type="text" id="new_card_number" name="new_card_number" required maxlength="16"><br><br>
-
-    <label for="new_card_expiry">Expiration Date:</label>
-    <input type="date" id="new_card_expiry" name="new_card_expiry" required><br><br>
-
-    <label for="new_card_holder">Cardholder Name:</label>
-    <input type="text" id="new_card_holder" name="new_card_holder" required><br><br>
-
-    <button type="submit" name="card_option" value="new_card">Add Card & Pay</button>
-</form>
+    <h3 class="mt-4">Add a New Card</h3>
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="new_card_number">Card Number:</label>
+            <input type="text" id="new_card_number" name="new_card_number" class="form-control" required maxlength="16">
+        </div>
+        <div class="form-group">
+            <label for="new_card_expiry">Expiration Date:</label>
+            <input type="date" id="new_card_expiry" name="new_card_expiry" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="new_card_holder">Cardholder Name:</label>
+            <input type="text" id="new_card_holder" name="new_card_holder" class="form-control" required>
+        </div>
+        <button type="submit" name="card_option" value="new_card" class="btn btn-secondary mt-3">Add Card & Pay</button>
+    </form>
+</div>
 {% endblock %}

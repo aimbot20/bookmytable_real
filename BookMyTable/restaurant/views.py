@@ -51,22 +51,6 @@ def reserve_table(request, R_ID):
     })
 
 
-# Logic building time: 
-# After sign up/log in, an owner will be redirected to the owner's dashboard.
-# There they will find a Create Restaurant button which will redirect them to add_restaurant
-# Add_restaurant will take in the restaurant's details and have a add_menu button
-# Add_menu will take in menu details + Dishes + Save button
-# Clicking the save button will redirect the owner to their dashboard
-# The dashboard will no longer have a "Create Restaurant" button but rather a Edit Restaurant button
-
-
-
-
-
-
-
-
-
 def add_or_edit_restaurant(request):
     if not request.user.is_owner:
         return redirect('home')
@@ -104,9 +88,7 @@ def addRestaurantView(request):
 
 
 def add_menu(request):
-    # if not request.user.is_owner:
-    #     return redirect('home')
-
+   
     owner = request.user.owner
     restaurant = Restaurant.objects.filter(owner=owner).first()
     if not restaurant:
@@ -151,10 +133,6 @@ def menu_dashboard(request):
     menu = restaurant.menu  # Assuming a one-to-one relationship
     dishes = menu.dishes.all()  # Fetch all dishes in the menu
     return render(request, 'menu_dashboard.html', {'menu': menu, 'dishes': dishes})
-
-
-
-
 
 
 
@@ -353,52 +331,3 @@ def add_tables(request, R_ID):
     })
 
 
-
-
- # Check if the restaurant already has a layout
-            # existing_layout = Layout.objects.filter(restaurant=restaurant).first()
-
-            # if existing_layout:
-            #     # If the restaurant already has a layout, update the existing one
-            #     existing_layout.width = layout.width
-            #     existing_layout.height = layout.height
-            #     # existing_layout.save()
-
-            #     width, height = existing_layout.width, existing_layout.height  # Pass updated values
-            #     #return redirect('owner_dashboard')  # Redirect after saving
-            #     layout = existing_layout
-
-
-                
-                       
-
-           
-
-            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            #if you are making a new layout from scratch
-            # else:
-                #save the dimensions entered in the form
-                # width = layout.width
-                # height = layout.height
-                # layout.save()
-
-                # tables_data = request.POST.get('tables')
-                # if tables_data:
-                #     tables_data = json.loads(tables_data)
-                #     for table_data in tables_data:
-                #         table = Table(
-                #             x_position=table_data['x_position'],
-                #             y_position=table_data['y_position'],
-                #             seating_capacity=table_data['seating_capacity'],
-                #             layout=layout
-                #         )
-                #     table.save()
-                
-                
-
-
-            #this takes the table data submitted in the form as a json string
-            
-
-                #return redirect('owner_dashboard')
-            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

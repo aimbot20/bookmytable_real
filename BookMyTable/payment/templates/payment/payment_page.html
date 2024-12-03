@@ -5,16 +5,22 @@ Reservation Details - {{ reservation.restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h2>Complete Your Payment at {{ reservation.restaurant.R_Name }}</h2>
+<div class="container">
+    <h2 class="card-heading text-center">Complete Your Payment at {{ reservation.restaurant.R_Name }}</h2>
 
-<p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
-<p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
-<p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+    <div class="reservation-details">
+        <p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
+        <p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
+        <p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+    </div>
 
-<h3>Select Payment Method</h3>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" name="payment_method" value="card">Pay with Card</button>
-    <button type="submit" name="payment_method" value="wallet">Pay with Wallet</button>
-</form>
+    <h3 class="mt-4">Select Payment Method</h3>
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        <div class="btn-group d-flex justify-content-center mt-3">
+            <button type="submit" name="payment_method" value="card" class="btn btn-primary mx-2">Pay with Card</button>
+            <button type="submit" name="payment_method" value="wallet" class="btn btn-secondary mx-2">Pay with Wallet</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

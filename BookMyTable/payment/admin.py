@@ -7,7 +7,6 @@ class PaymentAdmin(admin.ModelAdmin):
     search_fields = ('payment_id', 'reservation__id')  # Allow searching by reservation id
     list_filter = ('status',)  # Filter payments by their status
 
-
 # Admin class for PaymentByCard
 class PaymentByCardAdmin(admin.ModelAdmin):
     list_display = ('payment_id', 'saved_card', 'card_number', 'amount', 'status', 'reservation')
@@ -19,13 +18,11 @@ class PaymentByCardAdmin(admin.ModelAdmin):
             return f"Saved Card: {obj.saved_card.card_number[-4:]}"
         return f"One-Time Card: {obj.card_number[-4:] if obj.card_number else 'N/A'}"
 
-
 # Admin class for PaymentByWallet
 class PaymentByWalletAdmin(admin.ModelAdmin):
     list_display = ('payment_id', 'amount', 'status', 'reservation')
     search_fields = ('payment_id', 'reservation__customer__username')  # Search by customer username
     list_filter = ('status',)
-
 
 # Admin class for Card
 class CardAdmin(admin.ModelAdmin):
@@ -34,7 +31,7 @@ class CardAdmin(admin.ModelAdmin):
     fields = ('customer', 'card_number', 'expiry_date', 'cardholder_name')  # Fields displayed when editing
 
 
-# Register the models with the Django admin
+
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(PaymentByCard, PaymentByCardAdmin)
 admin.site.register(PaymentByWallet, PaymentByWalletAdmin)

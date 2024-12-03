@@ -5,22 +5,34 @@ Payment by Wallet - {{ reservation.restaurant.R_Name }}
 {% endblock %}
 
 {% block content %}
-<h2>Payment by Wallet at {{ reservation.restaurant.R_Name }}</h2>
+<div class="container">
+    <h2 class="card-heading text-center">Payment by Wallet at {{ reservation.restaurant.R_Name }}</h2>
 
-<p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
-<p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
-<p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+    <div class="reservation-details">
+        <p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
+        <p><strong>Table ID:</strong> {{ reservation.table.T_ID }}</p>
+        <p><strong>Reservation Cost:</strong> ${{ reservation.reservation_cost }}</p>
+    </div>
 
-{% if wallet and wallet.balance >= reservation.reservation_cost %}
-    <h3>You have enough balance to complete the payment.</h3>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Pay Now</button>
-    </form>
-{% elif wallet %}
-    <h3>Insufficient wallet balance. Your current balance is ${{ wallet.balance }}.</h3>
-    <p>Please add funds to your wallet to proceed with the payment.</p>
-{% else %}
-    <h3>No wallet found. Please create a wallet to proceed.</h3>
-{% endif %}
+    {% if wallet and wallet.balance >= reservation.reservation_cost %}
+        <div class="mt-4 text-center">
+            <h3 class="text-success">You have enough balance to complete the payment.</h3>
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Pay Now</button>
+            </form>
+        </div>
+    {% elif wallet %}
+        <div class="mt-4 text-center">
+            <h3 class="text-danger">Insufficient wallet balance.</h3>
+            <p>Your current balance is <strong>${{ wallet.balance }}</strong>.</p>
+            <p>Please add funds to your wallet to proceed with the payment.</p>
+        </div>
+    {% else %}
+        <div class="mt-4 text-center">
+            <h3 class="text-warning">No wallet found.</h3>
+            <p>Please create a wallet to proceed.</p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
