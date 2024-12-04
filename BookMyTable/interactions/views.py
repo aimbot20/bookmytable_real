@@ -2,8 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Review, SavedRestaurant
 from restaurant.models import Restaurant
 
+
 # to add a review
 def add_review(request, restaurant_id):
+
+    addreviewlink="interactions/add_review.html"
     restaurant = get_object_or_404(Restaurant, R_ID=restaurant_id)
 
     if request.method == "POST":
@@ -20,21 +23,21 @@ def add_review(request, restaurant_id):
         
         if not created:
             # If the review already exists, pass error message to template
-            return render(request, "interactions/add_review.html", {
+            return render(request, addreviewlink, {
                 'restaurant': restaurant,
                 'user_id': request.user.id,
                 'error_message': "You have already reviewed this restaurant!"
             })
         
         # Successfully created a review
-        return render(request, "interactions/add_review.html", {
+        return render(request, addreviewlink, {
             'restaurant': restaurant,
             'user_id': request.user.id,
             'success_message': "Review added successfully!"
         })
 
     # Render the form for adding a review if it's a GET request
-    return render(request, "interactions/add_review.html", {
+    return render(request, addreviewlink, {
         'restaurant': restaurant, 
         'user_id': request.user.id
     })
